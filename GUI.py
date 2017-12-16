@@ -13,10 +13,11 @@ FORMULA_PNG_FILE = FORMULA_FILE_NAME + ".png"
 
 # Render a LaTeX string to a PDF and return it.
 def renderLatexString(expression):
-	preamble = "\\documentclass{article} \\usepackage[active,tightpage]{preview} \\PreviewEnvironment{math} \\PreviewBorder=1pt \\begin{document}"
+	preamble = "\\documentclass[12pt]{article} \\usepackage[active,tightpage]{preview} \\PreviewEnvironment{math} \\PreviewBorder=3pt \\begin{document}"
 
-	string = "\\begin{math} \\displaystyle " + expression + " \\end{math}"
+	string = "\\Huge \\begin{math} \\displaystyle " + expression + " \\end{math}"
 	preview(string, output="png", viewer="file", filename=FORMULA_PNG_FILE, euler=False, preamble=preamble)
+	preview(string, output="pdf", viewer="file", filename=FORMULA_PDF_FILE, euler=False, preamble=preamble)
 
 class Application(ttk.Frame):
 	def __init__(self, master=None):

@@ -14,7 +14,7 @@ FORMULA_PNG_FILE = FORMULA_FILE_NAME + ".png"
 def renderLatexString(expression):
 	preamble = "\\documentclass[12pt]{article} \\usepackage[active,tightpage]{preview} \\PreviewEnvironment{math} \\PreviewBorder=3pt \\begin{document}"
 
-	string = "\\Huge \\begin{math} \\displaystyle " + expression + " \\end{math}"
+	string = "\\begin{math} \\displaystyle " + expression + " \\end{math}"
 	preview(string, output="png", viewer="file", filename=FORMULA_PNG_FILE, euler=False, preamble=preamble)
 	#preview(string, output="pdf", viewer="file", filename=FORMULA_PDF_FILE, euler=False, preamble=preamble)
 

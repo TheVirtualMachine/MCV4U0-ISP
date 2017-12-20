@@ -60,7 +60,7 @@ def graph(
 		plt.plot(sum_x, sum_y, 'red')
 	plt.xlim(lower, upper)
 	buffer = io.BytesIO()
-	plt.savefig(io, type='image/png')
+	plt.savefig(buffer, type='image/png')
 	buffer.seek(0)
 
 	return buffer

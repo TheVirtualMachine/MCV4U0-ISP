@@ -1,5 +1,7 @@
-import os
+import json
 from flask import Flask, request, abort
+from sympy import *
+
 from RiemannGrapher import graph
 from ErrorChecking import isBool, isFloat, isInt
 
@@ -9,7 +11,7 @@ app = Flask(__name__) # Create application instance.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plot_sum):
-		# TODO: Parse function.
+		#
 
 		if (n is not None):
 			if (isInt(n)):
@@ -58,5 +60,12 @@ def index():
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
+
+	results = {}
+	results.setdefault("integral", "x")
+	results.setdefault("sum", 0)
+	results.setdefault("graph", "")
+
+	return json.JSONEncoder().encode(results)
 	
 app.run(debug=True)

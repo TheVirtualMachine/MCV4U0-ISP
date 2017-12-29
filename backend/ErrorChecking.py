@@ -1,10 +1,6 @@
 # Check if the given string can be converted to a boolean.
 def isBool(string):
-	try:
-		bool(string)
-		return True
-	except ValueError:
-		return False
+	return string.lower() in ("true", "false")
 
 # Check if the given string can be converted to a float.
 def isFloat(string):

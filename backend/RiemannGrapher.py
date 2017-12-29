@@ -1,5 +1,5 @@
 '''Graphs function with a Riemman sum.'''
-import io
+from io import StringIO
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ def graph(
 		upper: float = 20,
 		pos_color: str = 'blue',
 		neg_color: str = 'red',
-		plot_sum: bool = False):
+		plotSum: bool = False):
 	'''graphs a function, along with a Riemann sum.'''
 
 	diff = upper - lower
@@ -56,11 +56,11 @@ def graph(
 		sum_y.append(riemann_sum)
 
 	plt.plot(x, y)
-	if plot_sum:
+	if plotSum:
 		plt.plot(sum_x, sum_y, 'red')
 	plt.xlim(lower, upper)
-	buffer = io.BytesIO()
-	plt.savefig(buffer, type='image/png')
-	buffer.seek(0)
+	image = StringIO()
+	plt.savefig(image, format='svg')
+	image.seek(0)
 
-	return buffer
+	return image.getvalue()

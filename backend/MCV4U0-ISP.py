@@ -1,6 +1,8 @@
 import json
 from flask import Flask, request, abort
 from sympy import *
+from sympy.abc import *
+from sympy.integrals.manualintegrate import integral_steps
 
 from latex2sympy.process_latex import process_sympy
 
@@ -13,8 +15,6 @@ app = Flask(__name__) # Create application instance.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plotSum):
-		#
-
 		if (n is not None):
 			if (isInt(n)):
 				n = int(n)
@@ -41,9 +41,9 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 		
 		if (plotSum is not None):
 			if (isBool(plotSum)):
-				plot_sum = bool(plotSum)
+				plotSum = plotSum.lower() == "true"
 			else:
-				plot_sum = None
+				plotSum = None
 
 		return (f, n, handed, lower, upper, plotSum)
 
@@ -56,20 +56,29 @@ def index():
 	upper = request.args.get("upper")
 	plotSum = request.args.get("sum")
 
-	print(f, n, handed, lower, upper, plotSum)
-
 	parsed = parseInput(f, n, handed, lower, upper, plotSum)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
 
+	f, n, handed, lower, upper, plotSum = parsed
+
 	sympyFunction = process_sympy(f)
-	print(sympyFunction)
+
+	indefiniteIntegral = integrate(sympyFunction, x)
+
+	steps = integral_steps(sympyFunction, x)
+	print(steps)
+	print(repr(steps))
+
+	definiteIntegral = integrate(sympyFunction, (x, lower, upper))
+	lambdaFunction = lambdify(x, sympyFunction)
+	graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 
 	results = {}
-	results.setdefault("integral", "x")
-	results.setdefault("sum", 0)
-	results.setdefault("graph", "")
+	results["integral"] = latex(indefiniteIntegral)
+	results["sum"] = latex(definiteIntegral)
+	results["graph"] = graphImage
 
 	return json.JSONEncoder().encode(results)
 	

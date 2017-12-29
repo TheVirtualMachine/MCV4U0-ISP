@@ -2,6 +2,8 @@ import json
 from flask import Flask, request, abort
 from sympy import *
 
+from latex2sympy.process_latex import process_sympy
+
 from RiemannGrapher import graph
 from ErrorChecking import isBool, isFloat, isInt
 

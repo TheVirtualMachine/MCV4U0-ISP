@@ -102,3 +102,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+frontend/package.json
+frontend/package-lock.json

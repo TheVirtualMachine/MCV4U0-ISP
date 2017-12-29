@@ -58,7 +58,5 @@ def index():
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
-		
-
-
+	
 app.run(debug=True)

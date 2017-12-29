@@ -12,7 +12,7 @@ app = Flask(__name__) # Create application instance.
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
-def parseInput(f, n, handed, lower, upper, plot_sum):
+def parseInput(f, n, handed, lower, upper, plotSum):
 		#
 
 		if (n is not None):
@@ -39,13 +39,13 @@ def parseInput(f, n, handed, lower, upper, plot_sum):
 				lower = None
 				upper = None
 		
-		if (plot_sum is not None):
-			if (isBool(plot_sum)):
-				plot_sum = bool(plot_sum)
+		if (plotSum is not None):
+			if (isBool(plotSum)):
+				plot_sum = bool(plotSum)
 			else:
 				plot_sum = None
 
-		return (f, n, handed, lower, upper, plot_sum)
+		return (f, n, handed, lower, upper, plotSum)
 
 @app.route("/")
 def index():
@@ -54,14 +54,17 @@ def index():
 	handed = request.args.get("handed")
 	lower = request.args.get("lower")
 	upper = request.args.get("upper")
-	plot_sum = request.args.get("plot_sum")
+	plotSum = request.args.get("sum")
 
-	print(f, n, handed, lower, upper, plot_sum)
+	print(f, n, handed, lower, upper, plotSum)
 
-	parsed = parseInput(f, n, handed, lower, upper, plot_sum)
+	parsed = parseInput(f, n, handed, lower, upper, plotSum)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
+
+	sympyFunction = process_sympy(f)
+	print(sympyFunction)
 
 	results = {}
 	results.setdefault("integral", "x")

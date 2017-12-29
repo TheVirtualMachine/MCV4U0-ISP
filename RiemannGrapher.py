@@ -23,11 +23,11 @@ def graph(
 
 	width = diff / n
 
-	if handed.lower() == 'left':
+	if handed == 'left':
 		offset = 0
-	elif handed.lower() in ('center', 'centre'):
+	elif handed in ('center', 'centre'):
 		offset = width / 2
-	elif handed.lower() == 'right':
+	elif handed == 'right':
 		offset = width
 	else:
 		raise ValueError('Invalid sum handedness.')

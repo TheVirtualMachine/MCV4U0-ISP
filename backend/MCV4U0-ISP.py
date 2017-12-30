@@ -89,7 +89,6 @@ def stupidifyFunction(function):
 	removedVariables = []
 	for var in variables:
 		if (sp.Symbol(var) in function.free_symbols):
-			print("Function contains: " + var)
 			function = function.subs(var, 1)
 			removedVariables.append(var)
 
@@ -114,17 +113,19 @@ def index():
 	sympyFunction = convertInput(f)
 	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 
+	# Calculate the integral.
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
-
-	steps = integral_steps(sympyFunction, x)
-
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
+
+	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	graphImage = ""
 	try:
 		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 	except:
 		abort(400)
+
+	steps = integral_steps(sympyFunction, x)
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}

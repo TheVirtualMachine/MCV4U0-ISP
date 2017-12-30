@@ -75,6 +75,7 @@ def index():
 	plotSum = request.args.get("sum")
 
 	parsed = parseInput(f, n, handed, lower, upper, plotSum)
+	print("Error trapped function is: " + f)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
@@ -82,6 +83,7 @@ def index():
 	f, n, handed, lower, upper, plotSum = parsed
 
 	sympyFunction = process_sympy(f)
+	stupidFunction = sympyFunction.subs(pi, math.pi).subs(e, math.e)
 
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
 
@@ -89,13 +91,11 @@ def index():
 	#print(steps)
 
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
-	lambdaFunction = sp.lambdify(x, sympyFunction, ("math", "mpmath", "sympy", "numpy"), dummify=True)
-	print(lambdaFunction(1.2))
+	lambdaFunction = sp.lambdify(x, stupidFunction)
 	graphImage = ""
 	try:
 		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 	except:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 		abort(400)
 
 	results = {}
@@ -105,4 +105,4 @@ def index():
 
 	return json.JSONEncoder().encode(results)
 	
-app.run()
+app.run(debug=True)

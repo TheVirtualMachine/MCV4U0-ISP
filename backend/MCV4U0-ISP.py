@@ -116,8 +116,8 @@ def index():
 	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 
 	# Calculate the integral.
-	indefiniteIntegral = sp.integrate(sympyFunction, x)
-	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
+	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
+	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
 
 
 	print(str(stupidFunction))
@@ -130,7 +130,9 @@ def index():
 		abort(501)
 
 	steps = integral_steps(sympyFunction, x)
-	print(steps)
+	print("Steps: " + repr(steps))
+	print("Type: " + str(type(steps)))
+	print("Substep: " + repr(steps.substeps))
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}

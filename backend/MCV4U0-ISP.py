@@ -134,6 +134,7 @@ def index():
 		abort(400)
 
 	steps = integral_steps(sympyFunction, x)
+	print(steps)
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}

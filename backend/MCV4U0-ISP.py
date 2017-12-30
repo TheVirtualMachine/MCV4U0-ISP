@@ -18,7 +18,6 @@ from flask import Flask, request, abort
 import sympy as sp
 from sympy.abc import *
 from sympy.integrals.manualintegrate import integral_steps
-import numpy
 
 import math
 

@@ -110,6 +110,7 @@ def index():
 
 	f, n, handed, lower, upper, plotSum = parsed
 
+	# Create the functions.
 	sympyFunction = convertInput(f)
 	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 

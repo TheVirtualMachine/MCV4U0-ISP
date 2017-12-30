@@ -24,7 +24,6 @@ import math
 from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
-from ErrorChecking import isBool, isFloat, isInt
 
 app = Flask(__name__) # Create application instance.
 
@@ -32,12 +31,12 @@ app = Flask(__name__) # Create application instance.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plotSum):
+
 		# Check and set the number of samples.
-		if (n is not None):
-			if (isInt(n)):
-				n = int(n)
-			else:
-				n = None
+		try:
+			n = int(n)
+		except ValueError:
+			n = None
 
 		# Check and set the method of evaluating the Riemann sum.
 		validHandedValues = ["left", "center", "centre", "right"]
@@ -47,21 +46,16 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 				handed = None
 
 		# Check and set the evaluation bounds of the sum.
-		if (lower is not None and upper is not None):
-			if (isFloat(lower) and isFloat(upper)):
-				lower = float(lower)
-				upper = float(upper)
-
-				if (lower > upper):
-					lower = None
-					upper = None
-			else:
-				lower = None
-				upper = None
+		try:
+			lower = sp.Rational(lower)
+			upper = sp.Rational(upper)
+		except TypeError:
+			lower = None
+			upper = None
 		
 		# Check and set the input for evaluating the running sum.
 		if (plotSum is not None):
-			if (isBool(plotSum)):
+			if (plotSum.lower() in ("true", "false")):
 				plotSum = plotSum.lower() == "true"
 			else:
 				plotSum = None
@@ -75,7 +69,7 @@ def convertInput(function):
 
 # Stupidify the function by replacing constants and variables with actual values.
 def stupidifyFunction(function):
-	function = function.subs(pi, math.pi).subs(E, math.e) # Substitute constants with actual values.
+	function = function.evalf()
 
 	variables = list(string.ascii_letters) + list(greeks) # List of possible variables.
 
@@ -95,7 +89,7 @@ def stupidifyFunction(function):
 		if (sp.Symbol(var) in function.free_symbols):
 			function = function.subs(var, 1)
 			removedVariables.append(var)
-
+	
 	return (function, removedVariables) # Return function and list of removed variables as a tuple.
 
 @app.route("/")
@@ -125,13 +119,15 @@ def index():
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
 
+
+	print(str(stupidFunction))
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	graphImage = ""
 	try:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
 	except:
-		abort(400)
+		abort(501)
 
 	steps = integral_steps(sympyFunction, x)
 

@@ -75,7 +75,7 @@ def convertInput(function):
 
 # Stupidify the function by replacing constants and variables with actual values.
 def stupidifyFunction(function):
-	function = function.subs(pi, math.pi).subs(E, math.e) # Substitute constants with actual values.
+	function = function.evalf()
 
 	variables = list(string.ascii_letters) + list(greeks) # List of possible variables.
 
@@ -124,6 +124,7 @@ def index():
 	# Calculate the integral.
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
+
 
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)

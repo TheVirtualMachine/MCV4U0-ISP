@@ -33,18 +33,21 @@ app = Flask(__name__) # Create application instance.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plotSum):
+		# Check and set the number of samples.
 		if (n is not None):
 			if (isInt(n)):
 				n = int(n)
 			else:
 				n = None
 
+		# Check and set the method of evaluating the Riemann sum.
 		validHandedValues = ["left", "center", "centre", "right"]
 		if (handed is not None):
 			handed = handed.lower()
 			if (handed not in validHandedValues):
 				handed = None
 
+		# Check and set the evaluation bounds of the sum.
 		if (lower is not None and upper is not None):
 			if (isFloat(lower) and isFloat(upper)):
 				lower = float(lower)
@@ -57,13 +60,14 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 				lower = None
 				upper = None
 		
+		# Check and set the input for evaluating the running sum.
 		if (plotSum is not None):
 			if (isBool(plotSum)):
 				plotSum = plotSum.lower() == "true"
 			else:
 				plotSum = None
 
-		return (f, n, handed, lower, upper, plotSum)
+		return (f, n, handed, lower, upper, plotSum) # Return the input as a tuple.
 
 # Convert the input function to a sympy function.
 def convertInput(function):
@@ -72,9 +76,9 @@ def convertInput(function):
 
 # Stupidify the function by replacing constants and variables with actual values.
 def stupidifyFunction(function):
-	function = function.subs(pi, math.pi).subs(E, math.e)
+	function = function.subs(pi, math.pi).subs(E, math.e) # Substitute constants with actual values.
 
-	variables = list(string.ascii_letters) + list(greeks)
+	variables = list(string.ascii_letters) + list(greeks) # List of possible variables.
 
 	# Lambda is a reserved word in Python, so SymPy uses the alternate spelling of "lamda".
 	variables.remove("lambda")
@@ -86,16 +90,18 @@ def stupidifyFunction(function):
 	variables.remove("x")
 	variables.remove("pi")
 
+	# Replace variables in function with 1.
 	removedVariables = []
 	for var in variables:
 		if (sp.Symbol(var) in function.free_symbols):
 			function = function.subs(var, 1)
 			removedVariables.append(var)
 
-	return (function, removedVariables)
+	return (function, removedVariables) # Return function and list of removed variables as a tuple.
 
 @app.route("/")
 def index():
+	# Read the input.
 	f = request.args.get("f")
 	n = request.args.get("n")
 	handed = request.args.get("handed")
@@ -103,11 +109,13 @@ def index():
 	upper = request.args.get("upper")
 	plotSum = request.args.get("sum")
 
+	# Parse and error check the input.
 	parsed = parseInput(f, n, handed, lower, upper, plotSum)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
 
+	# Unpack the parsed tuple.
 	f, n, handed, lower, upper, plotSum = parsed
 
 	# Create the functions.
@@ -137,6 +145,6 @@ def index():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	return json.JSONEncoder().encode(results)
+	return json.JSONEncoder().encode(results) # Return the results.
 	
 app.run(debug=True)

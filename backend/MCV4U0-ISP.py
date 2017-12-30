@@ -65,6 +65,34 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 
 		return (f, n, handed, lower, upper, plotSum)
 
+# Convert the input function to a sympy function.
+def convertInput(function):
+	return sp.sympify(str(process_sympy(function).subs(e, E)))
+
+# Stupidify the function by replacing constants and variables with actual values.
+def stupidifyFunction(function):
+	function = function.subs(pi, math.pi).subs(E, math.e)
+
+	variables = list(string.ascii_letters) + list(greeks)
+
+	# Lambda is a reserved word in Python, so SymPy uses the alternate spelling of "lamda".
+	variables.remove("lambda")
+	variables.append("lamda")
+
+	# Remove other special cases from the list.
+	variables.remove("e")
+	variables.remove("E")
+	variables.remove("x")
+	variables.remove("pi")
+
+	removedVariables = []
+	for var in variables:
+		if (sp.Symbol(var) in function.free_symbols):
+			function = function.subs(var, 1)
+			removedVariables.append(var)
+
+	return (function, removedVariables)
+
 @app.route("/")
 def index():
 	f = request.args.get("f")
@@ -81,8 +109,8 @@ def index():
 
 	f, n, handed, lower, upper, plotSum = parsed
 
-	sympyFunction = sp.sympify(str(process_sympy(f).subs(e, E)))
-	stupidFunction = sympyFunction.subs(pi, math.pi).subs(E, math.e)
+	sympyFunction = convertInput(f)
+	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
 
@@ -94,13 +122,15 @@ def index():
 	try:
 		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 	except:
-		graphImage = ""
-		#abort(400)
+		abort(400)
 
 	results = {}
 	results["integral"] = sp.latex(indefiniteIntegral)
 	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage
+	results["note"] = ""
+	if (len(removedVariables) > 0):
+		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
 	return json.JSONEncoder().encode(results)
 	

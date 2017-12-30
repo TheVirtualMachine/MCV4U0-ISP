@@ -84,7 +84,6 @@ def index():
 
 	steps = integral_steps(sympyFunction, x)
 	print(steps)
-	print(repr(steps))
 
 	definiteIntegral = integrate(sympyFunction, (x, lower, upper))
 	lambdaFunction = lambdify(x, sympyFunction)

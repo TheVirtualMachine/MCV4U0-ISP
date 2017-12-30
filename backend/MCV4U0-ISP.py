@@ -75,7 +75,6 @@ def index():
 	plotSum = request.args.get("sum")
 
 	parsed = parseInput(f, n, handed, lower, upper, plotSum)
-	print("Error trapped function is: " + f)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
@@ -88,7 +87,6 @@ def index():
 	indefiniteIntegral = sp.integrate(sympyFunction, x)
 
 	steps = integral_steps(sympyFunction, x)
-	#print(steps)
 
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
 	lambdaFunction = sp.lambdify(x, stupidFunction)

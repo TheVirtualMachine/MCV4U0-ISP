@@ -67,7 +67,8 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 
 # Convert the input function to a sympy function.
 def convertInput(function):
-	return sp.sympify(str(process_sympy(function).subs(e, E)))
+	sympyedFunction = process_sympy(function).subs(e, E).subs("lambda", lamda)
+	return sp.sympify(str(sympyedFunction))
 
 # Stupidify the function by replacing constants and variables with actual values.
 def stupidifyFunction(function):
@@ -88,6 +89,7 @@ def stupidifyFunction(function):
 	removedVariables = []
 	for var in variables:
 		if (sp.Symbol(var) in function.free_symbols):
+			print("Function contains: " + var)
 			function = function.subs(var, 1)
 			removedVariables.append(var)
 
@@ -124,6 +126,7 @@ def index():
 	except:
 		abort(400)
 
+	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
 	results["integral"] = sp.latex(indefiniteIntegral)
 	results["sum"] = sp.latex(definiteIntegral)

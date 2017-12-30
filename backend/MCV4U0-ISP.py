@@ -15,9 +15,12 @@
 
 import json
 from flask import Flask, request, abort
-from sympy import *
+import sympy as sp
 from sympy.abc import *
 from sympy.integrals.manualintegrate import integral_steps
+import numpy
+
+import math
 
 from latex2sympy.process_latex import process_sympy
 
@@ -78,28 +81,28 @@ def index():
 
 	f, n, handed, lower, upper, plotSum = parsed
 
-	print(f)
 	sympyFunction = process_sympy(f)
-	print(sympyFunction)
 
-	indefiniteIntegral = integrate(sympyFunction, x)
+	indefiniteIntegral = sp.integrate(sympyFunction, x)
 
 	steps = integral_steps(sympyFunction, x)
-	print(steps)
+	#print(steps)
 
-	definiteIntegral = integrate(sympyFunction, (x, lower, upper))
-	lambdaFunction = lambdify(x, sympyFunction)
+	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
+	lambdaFunction = sp.lambdify(x, sympyFunction, ("math", "mpmath", "sympy", "numpy"), dummify=True)
+	print(lambdaFunction(1.2))
 	graphImage = ""
 	try:
 		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
 	except:
-		graphImage = ""
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
+		abort(400)
 
 	results = {}
-	results["integral"] = latex(indefiniteIntegral)
-	results["sum"] = latex(definiteIntegral)
+	results["integral"] = sp.latex(indefiniteIntegral)
+	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage
 
 	return json.JSONEncoder().encode(results)
 	
-app.run(debug=True)
+app.run()

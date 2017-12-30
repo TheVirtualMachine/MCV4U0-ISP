@@ -78,7 +78,9 @@ def index():
 
 	f, n, handed, lower, upper, plotSum = parsed
 
+	print(f)
 	sympyFunction = process_sympy(f)
+	print(sympyFunction)
 
 	indefiniteIntegral = integrate(sympyFunction, x)
 
@@ -87,7 +89,11 @@ def index():
 
 	definiteIntegral = integrate(sympyFunction, (x, lower, upper))
 	lambdaFunction = lambdify(x, sympyFunction)
-	graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
+	graphImage = ""
+	try:
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
+	except:
+		graphImage = ""
 
 	results = {}
 	results["integral"] = latex(indefiniteIntegral)

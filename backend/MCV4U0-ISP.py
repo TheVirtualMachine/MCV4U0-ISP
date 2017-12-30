@@ -94,52 +94,58 @@ def stupidifyFunction(function):
 
 @app.route("/")
 def index():
-	# Read the input.
-	f = request.args.get("f")
-	n = request.args.get("n")
-	handed = request.args.get("handed")
-	lower = request.args.get("lower")
-	upper = request.args.get("upper")
-	plotSum = request.args.get("sum")
-
-	# Parse and error check the input.
-	parsed = parseInput(f, n, handed, lower, upper, plotSum)
-
-	if (None in parsed): # If there was an error parsing the input
-		abort(400)
-
-	# Unpack the parsed tuple.
-	f, n, handed, lower, upper, plotSum = parsed
-
-	# Create the functions.
-	sympyFunction = convertInput(f)
-	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
-
-	# Calculate the integral.
-	indefiniteIntegral = sp.integrate(sympyFunction, x)
-	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
-
-
-	print(str(stupidFunction))
-	# Graph the image.
-	lambdaFunction = sp.lambdify(x, stupidFunction)
-	graphImage = ""
 	try:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
+		# Read the input.
+		f = request.args.get("f")
+		n = request.args.get("n")
+		handed = request.args.get("handed")
+		lower = request.args.get("lower")
+		upper = request.args.get("upper")
+		plotSum = request.args.get("sum")
+
+		# Parse and error check the input.
+		parsed = parseInput(f, n, handed, lower, upper, plotSum)
+
+		if (None in parsed): # If there was an error parsing the input
+			abort(400)
+
+		# Unpack the parsed tuple.
+		f, n, handed, lower, upper, plotSum = parsed
+
+		# Create the functions.
+		sympyFunction = convertInput(f)
+		stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
+
+		# Calculate the integral.
+		indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
+		definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
+
+
+		print(str(stupidFunction))
+		# Graph the image.
+		lambdaFunction = sp.lambdify(x, stupidFunction)
+		graphImage = ""
+		try:
+			graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
+		except:
+			abort(501)
+
+		steps = integral_steps(sympyFunction, x)
+		print("Steps: " + repr(steps))
+		print("Type: " + str(type(steps)))
+		#print("Substep: " + repr(steps.substeps))
+
+		# Format the results into a dictionary which later is converted to JSON.
+		results = {}
+		results["integral"] = sp.latex(indefiniteIntegral)
+		results["sum"] = sp.latex(definiteIntegral)
+		results["graph"] = graphImage
+		results["note"] = ""
+		if (len(removedVariables) > 0):
+			results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
+
+		return json.JSONEncoder().encode(results) # Return the results.
 	except:
-		abort(501)
-
-	steps = integral_steps(sympyFunction, x)
-
-	# Format the results into a dictionary which later is converted to JSON.
-	results = {}
-	results["integral"] = sp.latex(indefiniteIntegral)
-	results["sum"] = sp.latex(definiteIntegral)
-	results["graph"] = graphImage
-	results["note"] = ""
-	if (len(removedVariables) > 0):
-		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-
-	return json.JSONEncoder().encode(results) # Return the results.
+		abort(418) # I'm a teapot!
 	
 app.run(debug=True)

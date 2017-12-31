@@ -48,7 +48,7 @@ def graph(
 		raise ValueError('Invalid sum handedness.')
 
 	x = np.linspace(lower, upper, n * 20)
-	y = f(x)
+	y = np.fromiter(map(f,x),x.dtype)
 
 	riemann_sum = 0
 	sum_x = []

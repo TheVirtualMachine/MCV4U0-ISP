@@ -1,0 +1,3 @@
+[submodule "latex2sympy"]
+	path = backend/latex2sympy/latex2sympy
+	url = https://github.com/TheVirtualMachine/latex2sympy.git

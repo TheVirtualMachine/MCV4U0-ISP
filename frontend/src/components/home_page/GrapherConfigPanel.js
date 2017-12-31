@@ -33,7 +33,6 @@ class GrapherConfigPanel extends Component {
                 </Row>
                 <Row id='x-range' className='aligned'>
                     <Input
-                        validate
                         type="text"
                         defaultValue={0}
                         id='lower-lim'
@@ -49,6 +48,7 @@ class GrapherConfigPanel extends Component {
                     width: '95%'
                 }}>
                     <label htmlFor="n-slider">Number of samples</label>
+                    <Icon left>graphic_eq</Icon>
                     <input type="range" min={5} max={100} step={5} defaultValue={5}/>
                 </Row>
                 <Row

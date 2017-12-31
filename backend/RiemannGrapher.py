@@ -1,5 +1,20 @@
+# This file is part of MCV4U0 ISP.
+#
+# MCV4U0 ISP is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# MCV4U0 ISP is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
+
 '''Graphs function with a Riemman sum.'''
-import io
+from io import StringIO
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -14,7 +29,7 @@ def graph(
 		upper: float = 20,
 		pos_color: str = 'blue',
 		neg_color: str = 'red',
-		plot_sum: bool = False):
+		plotSum: bool = False):
 	'''graphs a function, along with a Riemann sum.'''
 
 	diff = upper - lower
@@ -56,11 +71,11 @@ def graph(
 		sum_y.append(riemann_sum)
 
 	plt.plot(x, y)
-	if plot_sum:
+	if plotSum:
 		plt.plot(sum_x, sum_y, 'red')
 	plt.xlim(lower, upper)
-	buffer = io.BytesIO()
-	plt.savefig(buffer, type='image/png')
-	buffer.seek(0)
+	image = StringIO()
+	plt.savefig(image, format='svg')
+	image.seek(0)
 
-	return buffer
+	return image.getvalue()

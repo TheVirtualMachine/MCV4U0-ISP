@@ -103,4 +103,11 @@ ENV/
 # mypy
 .mypy_cache/
 
+<<<<<<< HEAD
 tempCodeRunnerFile.python
+=======
+*.aux
+*.bbl
+*.out
+*.blg
+>>>>>>> 73a26a786e70f8f277b7c884bea6901a2862068c

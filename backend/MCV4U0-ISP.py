@@ -17,13 +17,15 @@ import json
 from flask import Flask, request, abort
 import sympy as sp
 from sympy.abc import *
-from sympy.integrals.manualintegrate import integral_steps
 
-import math
+from sympy.integrals.manualintegrate import *
+
+#import math
 
 from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
+from ConstantStep import ConstantStep
 
 app = Flask(__name__) # Create application instance.
 
@@ -92,60 +94,68 @@ def stupidifyFunction(function):
 	
 	return (function, removedVariables) # Return function and list of removed variables as a tuple.
 
+# Return a list of steps.
+def getSteps(step, stepList):
+	steps = []
+	print("Steps: " + repr(step))
+	if (type(step) is ConstantRule):
+		print(repr(step) + " is of type constant rule.")
+		steps.append(ConstantStep(sp.latex(step.constant)).getData())
+		return steps
+	return steps
+
 @app.route("/")
 def index():
+	print()
+	print()
+	print()
+	# Read the input.
+	f = request.args.get("f")
+	n = request.args.get("n")
+	handed = request.args.get("handed")
+	lower = request.args.get("lower")
+	upper = request.args.get("upper")
+	plotSum = request.args.get("sum")
+
+	# Parse and error check the input.
+	parsed = parseInput(f, n, handed, lower, upper, plotSum)
+
+	if (None in parsed): # If there was an error parsing the input
+		abort(400)
+
+	# Unpack the parsed tuple.
+	f, n, handed, lower, upper, plotSum = parsed
+
+	# Create the functions.
+	sympyFunction = convertInput(f)
+	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
+
+	# Calculate the integral.
+	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
+	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
+
+
+	# Graph the image.
+	lambdaFunction = sp.lambdify(x, stupidFunction)
+	graphImage = ""
 	try:
-		# Read the input.
-		f = request.args.get("f")
-		n = request.args.get("n")
-		handed = request.args.get("handed")
-		lower = request.args.get("lower")
-		upper = request.args.get("upper")
-		plotSum = request.args.get("sum")
-
-		# Parse and error check the input.
-		parsed = parseInput(f, n, handed, lower, upper, plotSum)
-
-		if (None in parsed): # If there was an error parsing the input
-			abort(400)
-
-		# Unpack the parsed tuple.
-		f, n, handed, lower, upper, plotSum = parsed
-
-		# Create the functions.
-		sympyFunction = convertInput(f)
-		stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
-
-		# Calculate the integral.
-		indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
-		definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
-
-
-		print(str(stupidFunction))
-		# Graph the image.
-		lambdaFunction = sp.lambdify(x, stupidFunction)
-		graphImage = ""
-		try:
-			graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
-		except:
-			abort(501)
-
-		steps = integral_steps(sympyFunction, x)
-		print("Steps: " + repr(steps))
-		print("Type: " + str(type(steps)))
-		#print("Substep: " + repr(steps.substeps))
-
-		# Format the results into a dictionary which later is converted to JSON.
-		results = {}
-		results["integral"] = sp.latex(indefiniteIntegral)
-		results["sum"] = sp.latex(definiteIntegral)
-		results["graph"] = graphImage
-		results["note"] = ""
-		if (len(removedVariables) > 0):
-			results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-
-		return json.JSONEncoder().encode(results) # Return the results.
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
 	except:
-		abort(418) # I'm a teapot!
+		# Send back "501 error" instead of actually having an error to aid in debugging.
+		# I will change this to abort(501) later.
+		graphImage = "501 error"
+		#abort(501)
+
+	# Format the results into a dictionary which later is converted to JSON.
+	results = {}
+	results["integral"] = sp.latex(indefiniteIntegral)
+	results["sum"] = sp.latex(definiteIntegral)
+	results["graph"] = graphImage
+	results["note"] = ""
+	results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
+	if (len(removedVariables) > 0):
+		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
+
+	return json.JSONEncoder().encode(results) # Return the results.
 	
 app.run(debug=True)

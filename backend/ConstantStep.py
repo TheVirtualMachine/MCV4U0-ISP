@@ -13,19 +13,19 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
-PLACEHOLDER_VAR = "a"
+from Step import Step
+from Step import PLACEHOLDER_VAR
 
-class Step:
+RULE_NAME = "constant rule"
+RULE_FORMULA = "\\int {0} \\, dx = {0}x"
+
+class ConstantStep(Step):
 
 	# Initialize the step.
-	def __init__(self, ruleName : str, ruleFormula : str):
-		self.ruleName = ruleName
-		self.ruleFormula = ruleFormula
+	def __init__(self, constant):
+		super().__init__(RULE_NAME, RULE_FORMULA)
+		self.constant = constant
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return ("The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR)))
-	
-	# Get the data to be returned in JSON.
-	def getData(self) -> tuple:
-		return (self.ruleName, self.getText())
+		return "The {} says that {}.\nHere, {} = {}.\nSo, {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR), PLACEHOLDER_VAR, self.constant, self.ruleFormula.format(self.constant))

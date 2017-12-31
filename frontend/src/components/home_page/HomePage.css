@@ -1,0 +1,28 @@
+
+.homepage__math{
+    font-size: 18pt;
+    white-space:nowrap;
+}
+
+.homepage__math.static-math{
+    margin-left:20px;
+}
+
+#math-field{
+    min-width: 70%;
+}
+
+.mq-focused{
+    -webkit-box-shadow: none;
+    box-shadow: none !important;
+}
+
+.material-icons{
+    margin-top: 10px;
+}
+
+.centered-aligned{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

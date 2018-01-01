@@ -26,8 +26,16 @@ from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
 from ConstantStep import ConstantStep
+from AddStep import AddStep
 
 app = Flask(__name__) # Create application instance.
+
+DEBUG_MODE = True
+
+# Print to the console if in debug mode.
+def log(string):
+	if (DEBUG_MODE):
+		print(string)
 
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
@@ -96,19 +104,21 @@ def stupidifyFunction(function):
 
 # Return a list of steps.
 def getSteps(step, stepList):
-	steps = []
-	print("Steps: " + repr(step))
-	if (type(step) is ConstantRule):
-		print(repr(step) + " is of type constant rule.")
-		steps.append(ConstantStep(sp.latex(step.constant)).getData())
-		return steps
+	steps = stepList
+	log("Steps: " + repr(step))
+	if (type(step) is AddRule):
+		log("Appending add rule.")
+		steps.append(AddStep(step).getData())
+	elif (type(step) is ConstantRule):
+		log("Appending constant rule.")
+		steps.append(ConstantStep(step).getData())
 	return steps
 
 @app.route("/")
 def index():
-	print()
-	print()
-	print()
+	log("")
+	log("")
+	log("")
 	# Read the input.
 	f = request.args.get("f")
 	n = request.args.get("n")
@@ -156,6 +166,8 @@ def index():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	return json.JSONEncoder().encode(results) # Return the results.
+	#return json.JSONEncoder().encode(results) # Return the results.
+	print(str(results["steps"]))
+	return str(results["steps"][0][1])
 	
-app.run(debug=True)
+app.run(debug=DEBUG_MODE)

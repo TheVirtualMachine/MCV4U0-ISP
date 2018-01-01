@@ -18,7 +18,8 @@ PLACEHOLDER_VAR = "a"
 class Step:
 
 	# Initialize the step.
-	def __init__(self, ruleName : str, ruleFormula : str):
+	def __init__(self, step, ruleName : str, ruleFormula : str):
+		self.step = step
 		self.ruleName = ruleName
 		self.ruleFormula = ruleFormula
 	

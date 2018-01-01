@@ -124,6 +124,8 @@ def getSteps(step, stepList):
 	if (type(step) is AddRule):
 		log("Appending add rule.")
 		steps.append(AddStep(step).getData())
+		for substep in step.substeps:
+			steps += getSteps(substep, [])
 	elif (type(step) is ConstantRule):
 		log("Appending constant rule.")
 		steps.append(ConstantStep(step).getData())

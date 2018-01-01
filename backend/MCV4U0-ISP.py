@@ -171,6 +171,7 @@ def index():
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
+	results["function"] = sp.latex(sympyFunction)
 	results["integral"] = sp.latex(indefiniteIntegral)
 	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage

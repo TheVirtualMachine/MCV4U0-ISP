@@ -4,7 +4,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # MCV4U0 ISP is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -28,7 +28,7 @@ from RiemannGrapher import graph
 from ConstantStep import ConstantStep
 from AddStep import AddStep
 
-app = Flask(__name__) # Create application instance.
+app = Flask(__name__)  # Create application instance.
 
 DEBUG_MODE = True
 
@@ -40,69 +40,82 @@ def log(string):
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
+
+
 def parseInput(f, n, handed, lower, upper, plotSum):
 
-		# Check and set the number of samples.
-		try:
-			n = int(n)
-		except ValueError:
-			n = None
+    # Check and set the number of samples.
+    try:
+        n = int(n)
+    except ValueError:
+        n = None
 
-		# Check and set the method of evaluating the Riemann sum.
-		validHandedValues = ["left", "center", "centre", "right"]
-		if (handed is not None):
-			handed = handed.lower()
-			if (handed not in validHandedValues):
-				handed = None
+    # Check and set the method of evaluating the Riemann sum.
+    validHandedValues = ["left", "center", "centre", "right"]
+    if (handed is not None):
+        handed = handed.lower()
+        if (handed not in validHandedValues):
+            handed = None
 
-		# Check and set the evaluation bounds of the sum.
-		try:
-			lower = sp.Rational(lower)
-			upper = sp.Rational(upper)
-		except TypeError:
-			lower = None
-			upper = None
-		
-		# Check and set the input for evaluating the running sum.
-		if (plotSum is not None):
-			if (plotSum.lower() in ("true", "false")):
-				plotSum = plotSum.lower() == "true"
-			else:
-				plotSum = None
+    # Check and set the evaluation bounds of the sum.
+    try:
+        lower = sp.Rational(lower)
+        upper = sp.Rational(upper)
+    except TypeError:
+        lower = None
+        upper = None
 
-		return (f, n, handed, lower, upper, plotSum) # Return the input as a tuple.
+    # Check and set the input for evaluating the running sum.
+    if (plotSum is not None):
+        if (plotSum.lower() in ("true", "false")):
+            plotSum = plotSum.lower() == "true"
+        else:
+            plotSum = None
+
+    # Return the input as a tuple.
+    return (f, n, handed, lower, upper, plotSum)
 
 # Convert the input function to a sympy function.
+
+
 def convertInput(function):
-	sympyedFunction = process_sympy(function).subs(e, E).subs("lambda", lamda)
-	return sp.sympify(str(sympyedFunction))
+    sympyedFunction = process_sympy(function).subs(e, E).subs("lambda", lamda)
+    return sp.sympify(str(sympyedFunction))
 
-# Stupidify the function by replacing constants and variables with actual values.
+# Stupidify the function by replacing constants and variables with actual
+# values.
+
+
 def stupidifyFunction(function):
-	function = function.evalf()
+    function = function.evalf()
 
-	variables = list(string.ascii_letters) + list(greeks) # List of possible variables.
+    # List of possible variables.
+    variables = list(string.ascii_letters) + list(greeks)
 
-	# Lambda is a reserved word in Python, so SymPy uses the alternate spelling of "lamda".
-	variables.remove("lambda")
-	variables.append("lamda")
+    # Lambda is a reserved word in Python, so SymPy uses the alternate
+    # spelling of "lamda".
+    variables.remove("lambda")
+    variables.append("lamda")
 
-	# Remove other special cases from the list.
-	variables.remove("e")
-	variables.remove("E")
-	variables.remove("x")
-	variables.remove("pi")
+    # Remove other special cases from the list.
+    variables.remove("e")
+    variables.remove("E")
+    variables.remove("x")
+    variables.remove("pi")
 
-	# Replace variables in function with 1.
-	removedVariables = []
-	for var in variables:
-		if (sp.Symbol(var) in function.free_symbols):
-			function = function.subs(var, 1)
-			removedVariables.append(var)
-	
-	return (function, removedVariables) # Return function and list of removed variables as a tuple.
+    # Replace variables in function with 1.
+    removedVariables = []
+    for var in variables:
+        if (sp.Symbol(var) in function.free_symbols):
+            function = function.subs(var, 1)
+            removedVariables.append(var)
+
+    # Return function and list of removed variables as a tuple.
+    return (function, removedVariables)
 
 # Return a list of steps.
+
+
 def getSteps(step, stepList):
 	steps = stepList
 	log("Steps: " + repr(step))
@@ -158,6 +171,7 @@ def index():
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
+	results["function"] = sp.latex(sympyFunction)
 	results["integral"] = sp.latex(indefiniteIntegral)
 	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage
@@ -166,8 +180,6 @@ def index():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	#return json.JSONEncoder().encode(results) # Return the results.
-	print(str(results["steps"]))
-	return str(results["steps"][0][1])
+	return json.JSONEncoder().encode(results) # Return the results.
 	
 app.run(debug=DEBUG_MODE)

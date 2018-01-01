@@ -13,22 +13,21 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
-# Check if the given string can be converted to a boolean.
-def isBool(string):
-	return string.lower() in ("true", "false")
+from sympy import latex
 
-# Check if the given string can be converted to a float.
-def isFloat(string):
-	try:
-		float(string)
-		return True
-	except ValueError:
-		return False
+from Step import Step
+from Step import PLACEHOLDER_VAR
 
-# Check if the given string can be converted to an integer.
-def isInt(string):
-	try:
-		int(string)
-		return True
-	except ValueError:
-		return False
+RULE_NAME = "constant rule"
+RULE_FORMULA = "\\int {0} \\, dx = {0}x"
+
+class ConstantStep(Step):
+
+	# Initialize the step.
+	def __init__(self, step):
+		super().__init__(step, RULE_NAME, RULE_FORMULA)
+		self.constant = latex(self.step.constant)
+	
+	# Get the text for applying the rule.
+	def getText(self) -> str:
+		return "The {} says that {}.\nHere, {} = {}.\nSo, {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR), PLACEHOLDER_VAR, self.constant, self.ruleFormula.format(self.constant))

@@ -17,27 +17,36 @@ import json
 from flask import Flask, request, abort
 import sympy as sp
 from sympy.abc import *
-from sympy.integrals.manualintegrate import integral_steps
 
-import math
+from sympy.integrals.manualintegrate import *
+
+#import math
 
 from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
-from ErrorChecking import isBool, isFloat, isInt
+from ConstantStep import ConstantStep
+from AddStep import AddStep
 
 app = Flask(__name__) # Create application instance.
+
+DEBUG_MODE = True
+
+# Print to the console if in debug mode.
+def log(string):
+	if (DEBUG_MODE):
+		print(string)
 
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plotSum):
+
 		# Check and set the number of samples.
-		if (n is not None):
-			if (isInt(n)):
-				n = int(n)
-			else:
-				n = None
+		try:
+			n = int(n)
+		except ValueError:
+			n = None
 
 		# Check and set the method of evaluating the Riemann sum.
 		validHandedValues = ["left", "center", "centre", "right"]
@@ -47,21 +56,16 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 				handed = None
 
 		# Check and set the evaluation bounds of the sum.
-		if (lower is not None and upper is not None):
-			if (isFloat(lower) and isFloat(upper)):
-				lower = float(lower)
-				upper = float(upper)
-
-				if (lower > upper):
-					lower = None
-					upper = None
-			else:
-				lower = None
-				upper = None
+		try:
+			lower = sp.Rational(lower)
+			upper = sp.Rational(upper)
+		except TypeError:
+			lower = None
+			upper = None
 		
 		# Check and set the input for evaluating the running sum.
 		if (plotSum is not None):
-			if (isBool(plotSum)):
+			if (plotSum.lower() in ("true", "false")):
 				plotSum = plotSum.lower() == "true"
 			else:
 				plotSum = None
@@ -75,7 +79,7 @@ def convertInput(function):
 
 # Stupidify the function by replacing constants and variables with actual values.
 def stupidifyFunction(function):
-	function = function.subs(pi, math.pi).subs(E, math.e) # Substitute constants with actual values.
+	function = function.evalf()
 
 	variables = list(string.ascii_letters) + list(greeks) # List of possible variables.
 
@@ -95,11 +99,26 @@ def stupidifyFunction(function):
 		if (sp.Symbol(var) in function.free_symbols):
 			function = function.subs(var, 1)
 			removedVariables.append(var)
-
+	
 	return (function, removedVariables) # Return function and list of removed variables as a tuple.
 
-@app.route("/")
+# Return a list of steps.
+def getSteps(step, stepList):
+	steps = stepList
+	log("Steps: " + repr(step))
+	if (type(step) is AddRule):
+		log("Appending add rule.")
+		steps.append(AddStep(step).getData())
+	elif (type(step) is ConstantRule):
+		log("Appending constant rule.")
+		steps.append(ConstantStep(step).getData())
+	return steps
+
+@app.route("/api")
 def index():
+	log("")
+	log("")
+	log("")
 	# Read the input.
 	f = request.args.get("f")
 	n = request.args.get("n")
@@ -122,18 +141,20 @@ def index():
 	stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 
 	# Calculate the integral.
-	indefiniteIntegral = sp.integrate(sympyFunction, x)
-	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
+	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
+	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
+
 
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	graphImage = ""
 	try:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=lower, upper=upper, plotSum=plotSum)
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
 	except:
-		abort(400)
-
-	steps = integral_steps(sympyFunction, x)
+		# Send back "501 error" instead of actually having an error to aid in debugging.
+		# I will change this to abort(501) later.
+		graphImage = "501 error"
+		#abort(501)
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
@@ -141,9 +162,12 @@ def index():
 	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage
 	results["note"] = ""
+	results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	return json.JSONEncoder().encode(results) # Return the results.
+	#return json.JSONEncoder().encode(results) # Return the results.
+	print(str(results["steps"]))
+	return str(results["steps"][0][1])
 	
-app.run(debug=True)
+app.run(debug=DEBUG_MODE)

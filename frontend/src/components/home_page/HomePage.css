@@ -41,12 +41,35 @@
     box-shadow: none !important;
 }
 
-.material-picker {
+.collapsible-body {
+    padding: 0;
+}
+
+.block-picker {
     width: auto !important;
     height: auto !important;
     padding: 5px !important;
 }
 
+#n-slider {
+    width: 95%;
+}
+
+#handed {
+    align-items: center;
+}
+
+#running-area {
+    padding-top: 25px;
+}
+
 .btn.red {
     width: 100%;
+}
+
+
+input::-moz-focus-outer {
+    outline: 0 !important;
+    border: 0 !important;
+    outline-style: none !important;
 }

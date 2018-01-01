@@ -18,15 +18,16 @@ PLACEHOLDER_VAR = "a"
 
 class Step:
 
-    # Initialize the step.
-    def __init__(self, ruleName: str, ruleFormula: str):
-        self.ruleName = ruleName
-        self.ruleFormula = ruleFormula
-
-    # Get the text for applying the rule.
-    def getText(self) -> str:
-        return ("The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR)))
-
-    # Get the data to be returned in JSON.
-    def getData(self) -> tuple:
-        return (self.ruleName, self.getText())
+	# Initialize the step.
+	def __init__(self, step, ruleName : str, ruleFormula : str):
+		self.step = step
+		self.ruleName = ruleName
+		self.ruleFormula = ruleFormula
+	
+	# Get the text for applying the rule.
+	def getText(self) -> str:
+		return ("The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR)))
+	
+	# Get the data to be returned in JSON.
+	def getData(self) -> tuple:
+		return (self.ruleName, self.getText())

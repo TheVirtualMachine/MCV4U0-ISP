@@ -25,8 +25,10 @@ from sympy.integrals.manualintegrate import *
 from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
+
 from ConstantStep import ConstantStep
 from AddStep import AddStep
+from PowerStep import PowerStep
 
 app = Flask(__name__)  # Create application instance.
 
@@ -125,6 +127,9 @@ def getSteps(step, stepList):
 	elif (type(step) is ConstantRule):
 		log("Appending constant rule.")
 		steps.append(ConstantStep(step).getData())
+	elif (type(step) is PowerRule):
+		log("Appending power rule.")
+		steps.append(PowerStep(step).getData())
 	return steps
 
 @app.route("/api")
@@ -176,9 +181,9 @@ def index():
 	results["sum"] = sp.latex(definiteIntegral)
 	results["graph"] = graphImage
 	results["note"] = ""
-	results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
+	results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
 
 	return json.JSONEncoder().encode(results) # Return the results.
 	

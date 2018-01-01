@@ -114,7 +114,7 @@ def getSteps(step, stepList):
 		steps.append(ConstantStep(step).getData())
 	return steps
 
-@app.route("/")
+@app.route("/api")
 def index():
 	log("")
 	log("")

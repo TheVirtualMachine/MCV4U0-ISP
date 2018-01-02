@@ -193,12 +193,9 @@ def index():
 	except Exception:
 		abort(400)
 
-	# Calculate the integral.
-	sp.integrate(sympyFunction, x)
-
+	# Calculate the integrals.
 	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
-
 
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)

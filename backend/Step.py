@@ -13,10 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from sympy import Symbol
+
 PLACEHOLDER_CONST = "a"
 PLACEHOLDER_VAR = "x"
 PLACEHOLDER_FCN = "f\\left( {} \\right)".format(PLACEHOLDER_VAR)
 PLACEHOLDER_DUMMY = "u"
+DUMMY_SYMBOL = Symbol(PLACEHOLDER_DUMMY)
 
 class Step:
 

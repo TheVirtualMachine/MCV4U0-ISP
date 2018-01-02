@@ -17,9 +17,10 @@ from sympy import latex
 from Step import Step
 from Step import PLACEHOLDER_CONST
 from Step import PLACEHOLDER_FCN
+from Step import PLACEHOLDER_VAR
 
 RULE_NAME = "constant times rule"
-RULE_FORMULA = "\\int {0}{1} \\, dx = {0} \\int {1} \\, dx"
+RULE_FORMULA = "\\int {0}{1} \\, d{2} = {0} \\int {1} \\, d{2}"
 
 
 class ConstantTimesStep(Step):
@@ -29,10 +30,11 @@ class ConstantTimesStep(Step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)
 		self.constant = latex(self.step.constant)
 		self.other = latex(self.step.other)
+		self.symbol = latex(self.step.symbol)
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN))
+		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR))
 		sub = "Here, {} = {} and {} = {}".format(PLACEHOLDER_CONST, self.constant, PLACEHOLDER_FCN, self.other)
-		solution = "So, {}".format(self.ruleFormula.format(self.constant, self.other))
+		solution = "So, {}".format(self.ruleFormula.format(self.constant, self.other, self.symbol))
 		return "{}\n{}\n{}".format(rule, sub, solution)

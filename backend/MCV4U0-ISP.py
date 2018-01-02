@@ -161,6 +161,8 @@ def getSteps(step):
 		steps.append((UStep(step).getData(), getSteps(step.substep)))
 	else:
 		log("Appending don't know rule.")
+		if (type(step) is not DontKnowRule):
+			log("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
 		steps.append(DontKnowStep(step).getData())
 	return steps
 

@@ -16,6 +16,7 @@
 PLACEHOLDER_CONST = "a"
 PLACEHOLDER_VAR = "x"
 PLACEHOLDER_FCN = "f\\left( {} \\right)".format(PLACEHOLDER_VAR)
+PLACEHOLDER_DUMMY = "u"
 
 class Step:
 

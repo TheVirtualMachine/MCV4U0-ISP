@@ -33,6 +33,7 @@ from ConstantTimesStep import ConstantTimesStep
 from DontKnowStep import DontKnowStep
 from TrigStep import TrigStep
 from ExpStep import ExpStep
+from ReciprocalStep import ReciprocalStep
 
 app = Flask(__name__)  # Create application instance.
 
@@ -146,6 +147,9 @@ def getSteps(step):
 	elif (type(step) is ExpRule):
 		log("Appending exp rule.")
 		steps.append(ExpStep(step).getData())
+	elif (type(step) is ReciprocalRule):
+		log("Appending reciprocal rule.")
+		steps.append(ReciprocalStep(step).getData())
 	else:
 		log("Appending don't know rule.")
 		steps.append(DontKnowStep(step).getData())

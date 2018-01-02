@@ -138,7 +138,7 @@ def getSteps(step):
 	elif (type(step) is ConstantTimesRule):
 		log("Appending constant times rule.")
 		steps.append((ConstantTimesStep(step).getData(), getSteps(step.substep)))
-	elif (type(step) is DontKnowRule):
+	else:
 		log("Appending don't know rule.")
 		steps.append(DontKnowStep(step).getData())
 	return steps

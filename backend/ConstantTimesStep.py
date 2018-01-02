@@ -19,7 +19,7 @@ from Step import PLACEHOLDER_VAR
 from Step import PLACEHOLDER_FCN
 
 RULE_NAME = "constant times rule"
-RULE_FORMULA = "\\int {0}{1} \\, dx = {0} \\int {1} dx"
+RULE_FORMULA = "\\int {0}{1} \\, dx = {0} \\int {1} \\, dx"
 
 
 class ConstantTimesStep(Step):

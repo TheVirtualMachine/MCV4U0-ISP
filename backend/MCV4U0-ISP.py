@@ -35,10 +35,11 @@ from TrigStep import TrigStep
 from ExpStep import ExpStep
 from ReciprocalStep import ReciprocalStep
 from UStep import UStep
+from RewriteStep import RewriteStep
 
 app = Flask(__name__)  # Create application instance.
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 # Print to the console if in debug mode.
 def log(string):
@@ -159,10 +160,13 @@ def getSteps(step):
 	elif (type(step) is URule):
 		log("Appending u rule.")
 		steps.append((UStep(step).getData(), getSteps(step.substep)))
+	elif (type(step) is RewriteRule):
+		log("Appending rewrite rule.")
+		steps.append((RewriteStep(step).getData(), getSteps(step.substep)))
 	else:
 		log("Appending don't know rule.")
 		if (type(step) is not DontKnowRule):
-			log("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
+			print("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
 		steps.append(DontKnowStep(step).getData())
 	return steps
 

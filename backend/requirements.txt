@@ -1,0 +1,5 @@
+matplotlib>=2.0.0
+sympy>=1.1.1
+Flask>=0.11.1
+numpy>=1.13.3
+antlr4_python2_runtime==4.7.1

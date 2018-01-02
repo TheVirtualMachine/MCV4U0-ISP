@@ -37,5 +37,5 @@ class PowerStep(Step):
 	def getText(self) -> str:
 		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_VAR))
 		sub = "Here, {} = {}.".format(PLACEHOLDER_VAR, self.exponent)
-		solution = "So, {} = {}".format(self.ruleFormula.format(self.exponent), latex(integrate(self.formula, x)))
+		solution = "So, {} = {}".format(self.ruleFormula.format(self.exponent), latex(integrate(self.formula, x, manual=True)))
 		return "{}\n{}\n{}".format(rule, sub, solution)

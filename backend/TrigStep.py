@@ -20,7 +20,7 @@ from sympy import csc
 from sympy import sec
 
 from Step import Step
-from Step import PLACEHOLDER_VAR
+from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "trig rule"
 RULE_FORMULA = "\\int {0} \\, dx = {1}"

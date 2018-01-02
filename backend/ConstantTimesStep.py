@@ -15,7 +15,7 @@
 from sympy import latex
 
 from Step import Step
-from Step import PLACEHOLDER_VAR
+from Step import PLACEHOLDER_CONST
 from Step import PLACEHOLDER_FCN
 
 RULE_NAME = "constant times rule"
@@ -32,7 +32,7 @@ class ConstantTimesStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR, PLACEHOLDER_FCN))
-		sub = "Here, {} = {} and {} = {}".format(PLACEHOLDER_VAR, self.constant, PLACEHOLDER_FCN, self.other)
+		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN))
+		sub = "Here, {} = {} and {} = {}".format(PLACEHOLDER_CONST, self.constant, PLACEHOLDER_FCN, self.other)
 		solution = "So, {}".format(self.ruleFormula.format(self.constant, self.other))
 		return "{}\n{}\n{}".format(rule, sub, solution)

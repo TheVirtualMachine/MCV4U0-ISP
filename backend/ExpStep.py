@@ -14,32 +14,29 @@
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
 from sympy import latex
+from sympy import integrate
+from sympy.abc import x
 
 from Step import Step
 from Step import PLACEHOLDER_CONST
+from Step import PLACEHOLDER_VAR
 
-RULE_NAME = "add rule"
-RULE_FORMULA = "\\int f(x) + g(x) \\, dx = \\int f(x) dx + \\int g(x) dx"
+RULE_NAME = "exponent rule"
+RULE_FORMULA = "\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\ln ({0}) }}"
+RULE_RESTRICTION = "{0} \\neq 1"
 
-class AddStep(Step):
+class PowerStep(Step):
 
 	# Initialize the step.
 	def __init__(self, step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)
-		self.formula = latex(self.step.context)
-		self.substeps = self.step.substeps
-	
+		self.exponent = latex(self.step.exp)
+		self.base = latex(self.step.base)
+		self.formula = self.step.context
+
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		applyRule = "\\int {} dx =".format(self.formula)
-
-		first = True
-		for substep in self.substeps:
-			print("Substep is: " + str(substep))
-			if first:
-				applyRule += "\\int {} dx".format(latex(substep.context))
-				first = False
-			else:
-				applyRule += " + \\int {} dx".format(latex(substep.context))
-		
-		return "The {} says that {}.\nThis means that we can integrate each term individually.\nSo, {}".format(self.ruleName, self.ruleFormula, applyRule)
+		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_CONST))
+		sub = "Here, {} = {}.".format(PLACEHOLDER_CONST, self.base)
+		solution = "So, {} = {}".format(self.ruleFormula.format(self.base), latex(integrate(self.formula, x, manual=True)))
+		return "{}\n{}\n{}".format(rule, sub, solution)

@@ -19,7 +19,7 @@ from sympy.integrals.risch import NonElementaryIntegral as NonElementaryIntegral
 from sympy.abc import x
 
 from Step import Step
-from Step import PLACEHOLDER_VAR
+from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "don't know rule"
 RULE_FORMULA = "\\int {0} \\, dx = \\int {0} \\, dx"

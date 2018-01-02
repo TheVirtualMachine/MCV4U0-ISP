@@ -31,6 +31,7 @@ from AddStep import AddStep
 from PowerStep import PowerStep
 from ConstantTimesStep import ConstantTimesStep
 from DontKnowStep import DontKnowStep
+from TrigStep import TrigStep
 
 app = Flask(__name__)  # Create application instance.
 
@@ -138,6 +139,9 @@ def getSteps(step):
 	elif (type(step) is ConstantTimesRule):
 		log("Appending constant times rule.")
 		steps.append((ConstantTimesStep(step).getData(), getSteps(step.substep)))
+	elif (type(step) is TrigRule):
+		log("Appending trig rule.")
+		steps.append(TrigStep(step).getData())
 	else:
 		log("Appending don't know rule.")
 		steps.append(DontKnowStep(step).getData())

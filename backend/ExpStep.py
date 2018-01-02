@@ -25,11 +25,12 @@ RULE_NAME = "exponent rule"
 RULE_FORMULA = "\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\ln ({0}) }}"
 RULE_RESTRICTION = "{0} \\neq 1"
 
-class PowerStep(Step):
+class ExpStep(Step):
 
 	# Initialize the step.
 	def __init__(self, step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)
+		self.ruleRestriction = RULE_RESTRICTION
 		self.exponent = latex(self.step.exp)
 		self.base = latex(self.step.base)
 		self.formula = self.step.context
@@ -37,6 +38,6 @@ class PowerStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_CONST))
-		sub = "Here, {} = {}.".format(PLACEHOLDER_CONST, self.base)
-		solution = "So, {} = {}".format(self.ruleFormula.format(self.base), latex(integrate(self.formula, x, manual=True)))
+		sub = "Here, {} = {} and {} = {}.".format(PLACEHOLDER_CONST, self.base, PLACEHOLDER_VAR, self.exponent)
+		solution = "So, {}".format(self.ruleFormula.format(self.base, self.exponent))
 		return "{}\n{}\n{}".format(rule, sub, solution)

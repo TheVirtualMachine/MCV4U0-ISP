@@ -37,4 +37,4 @@ class TrigStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return "The {} tells us that {}.".format(RULE_NAME, RULE_FORMULA.format(self.function, integrate(self.formula, self.argument)))
+		return "The {} tells us that {}.".format(RULE_NAME, RULE_FORMULA.format(self.function, latex(integrate(self.formula, self.argument))))

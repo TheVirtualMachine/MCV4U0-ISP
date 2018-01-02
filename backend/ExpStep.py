@@ -22,7 +22,7 @@ from Step import PLACEHOLDER_CONST
 from Step import PLACEHOLDER_VAR
 
 RULE_NAME = "exponent rule"
-RULE_FORMULA = "\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\ln ({0}) }}"
+RULE_FORMULA = "\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\log ({0}) }}"
 RULE_RESTRICTION = "{0} \\neq 1"
 
 class ExpStep(Step):

@@ -11,7 +11,7 @@
     margin-top: 20px;
 }
 
-.mq-focused {
+#mathquill .mq-focused {
     -webkit-box-shadow: none;
     box-shadow: none !important;
 }
@@ -67,6 +67,10 @@
     width: 100%;
 }
 
+input[type='text'].invalid {
+    border-bottom: 1px solid red;
+    box-shadow: 0 1px 0 0 red;
+}
 
 input::-moz-focus-outer {
     outline: 0 !important;

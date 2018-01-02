@@ -5,7 +5,8 @@ import {
     Input,
     Collapsible,
     CollapsibleItem,
-    Icon
+    Icon,
+    Button
 } from 'react-materialize';
 import MathEditor from '../MathEditor';
 import {BlockPicker} from 'react-color';
@@ -24,23 +25,114 @@ const SWATCHES = [
     '#beeeef'
 ]
 
+const ColorPickerItem = (props) => {
+    return (
+        <CollapsibleItem
+            header={props.header}
+            icon={props.icon}
+            style={{
+            color: props.color
+        }}>
+            <BlockPicker
+                triangle='hide'
+                color={props.color}
+                colors={SWATCHES}
+                onChangeComplete={props.onChangeComplete}/>
+        </CollapsibleItem>
+    );
+};
+
 class GrapherConfigPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            equation: 'x^2',
+            lower: 0,
+            upper: 20,
+            samples: 5,
+            handed: 'left',
+            graphArea: false,
             posColor: 'blue',
-            negColor: 'red'
+            negColor: 'red',
+            valid: {
+                // NOTE: those that are excluded have a closed set of results or already reject
+                // invalid results.
+                equation: true,
+                lower: true,
+                upper: true
+            }
         }
+    }
+
+    handleEquationChange(latex) {
+        //TODO: validate
+        this.setState({equation: latex});
+    }
+
+    handleLimitChange(upper) {
+        return ({
+            target
+        }, val) => {
+            let valid = !isNaN(val);
+            if (upper) {
+                this.setState((prevState) => {
+                    return {
+                        valid: {
+                            ...prevState.valid,
+                            upper: valid
+                        }
+                    };
+                });
+            } else {
+                this.setState((prevState) => {
+                    return {
+                        valid: {
+                            ...prevState.valid,
+                            lower: valid
+                        }
+                    };
+                });
+            }
+            if (!valid) {
+                //reject
+                return;
+            }
+            this.setState(upper
+                ? {
+                    upper: Number.parseInt(val)
+                }
+                : {
+                    lower: Number.parseInt(val)
+                });
+        };
+    }
+
+    handleSampleChange({target}) {
+        this.setState({samples: target.value});
+    }
+
+    handleHandedChange(event, val) {
+        this.setState({handed: val});
+    }
+
+    handleGraphAreaChange(event, val) {
+        this.setState({graphArea: val});
     }
 
     handleColorChange(pos) {
         return ({hex}) => {
-            if (pos) {
-                this.setState({posColor: hex});
-            } else {
-                this.setState({negColor: hex});
-            }
+            this.setState(pos
+                ? {
+                    posColor: hex
+                }
+                : {
+                    negColor: hex
+                });
         };
+    }
+
+    submit() {
+        console.log(this.state);
     }
 
     render() {
@@ -51,67 +143,100 @@ class GrapherConfigPanel extends Component {
                         style={{
                         marginLeft: '10px'
                     }}>f(x)\ =</MathEditor>
-                    <MathEditor editable/>
+                    <MathEditor
+                        editable
+                        onChange={this
+                        .handleEquationChange
+                        .bind(this)}/>
                 </Row>
                 <Row id='x-range' className='aligned'>
                     <Input
+                        onChange={this
+                        .handleLimitChange(false)
+                        .bind(this)}
                         type="text"
                         defaultValue={0}
                         id='lower-lim'
                         label='Limits'
-                        icon='space_bar'/>
+                        icon='space_bar'
+                        validate={this.state.valid.lower}
+                        className={(!this.state.valid.lower && 'invalid') || ''}/>
                     <MathEditor>\leq\ x\ \leq</MathEditor>
-                    <Input type="text" defaultValue={20} id='upper-lim'/>
+                    <Input
+                        onChange={this
+                        .handleLimitChange(true)
+                        .bind(this)}
+                        type="text"
+                        defaultValue={20}
+                        id='upper-lim'
+                        validate={this.state.valid.upper}
+                        className={!this.state.valid.upper && 'invalid'}/>
                 </Row>
                 <Row id='n-slider' className='range-field'>
                     <label htmlFor="n-slider">Number of samples</label>
                     <Icon left>graphic_eq</Icon>
-                    <input type="range" min={5} max={100} step={5} defaultValue={5}/>
+                    <input
+                        onChange={this
+                        .handleSampleChange
+                        .bind(this)}
+                        type="range"
+                        min={5}
+                        max={100}
+                        step={5}
+                        defaultValue={5}/>
                 </Row>
                 <Row id='handed'>
                     <Col s={6} l={4} className='aligned'>
-                        <Input type='select' label='Handedness' defaultValue={'left'} icon='pan_tool'>
+                        <Input
+                            onChange={this
+                            .handleHandedChange
+                            .bind(this)}
+                            label='Handedness'
+                            defaultValue={'left'}
+                            icon='pan_tool'
+                            type='select'>
                             <option value='left'>Left</option>
                             <option value='center'>Center</option>
                             <option value='right'>Right</option>
                         </Input>
                     </Col>
                     <Col id='running-area' s={6} l={4}>
-                        <Input type='checkbox' label='Graph Running Area'/>
+                        <Input
+                            onChange={this
+                            .handleGraphAreaChange
+                            .bind(this)}
+                            type='checkbox'
+                            label='Graph Running Area'/>
                     </Col>
                     <Col s={12} l={4}>
                         <label>Colours</label>
                         <Collapsible>
-                            <CollapsibleItem
+                            <ColorPickerItem
                                 header='Positive'
                                 icon='add_circle'
-                                style={{
-                                color: this.state.posColor
-                            }}>
-                                <BlockPicker
-                                    triangle='hide'
-                                    color={this.state.posColor}
-                                    colors={SWATCHES}
-                                    onChangeComplete={this
-                                    .handleColorChange(true)
-                                    .bind(this)}/>
-                            </CollapsibleItem>
-                            <CollapsibleItem
+                                color={this.state.posColor}
+                                onChangeComplete={this
+                                .handleColorChange(true)
+                                .bind(this)}/>
+                            <ColorPickerItem
                                 header='Negative'
                                 icon='remove_circle'
-                                style={{
-                                color: this.state.negColor
-                            }}>
-                                <BlockPicker
-                                    triangle='hide'
-                                    color={this.state.negColor}
-                                    colors={SWATCHES}
-                                    onChangeComplete={this
-                                    .handleColorChange(false)
-                                    .bind(this)}/>
-                            </CollapsibleItem>
+                                color={this.state.negColor}
+                                onChangeComplete={this
+                                .handleColorChange(false)
+                                .bind(this)}/>
                         </Collapsible>
                     </Col>
+                </Row>
+                <Row id='submit-btn'>
+                    <Button
+                        onClick={this
+                        .submit
+                        .bind(this)}
+                        className='red'
+                        waves='light'>Graph
+                        <Icon left>show_chart</Icon>
+                    </Button>
                 </Row>
             </div>
         )

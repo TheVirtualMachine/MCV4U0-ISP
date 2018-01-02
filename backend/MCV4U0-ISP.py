@@ -29,6 +29,7 @@ from RiemannGrapher import graph
 from ConstantStep import ConstantStep
 from AddStep import AddStep
 from PowerStep import PowerStep
+from ConstantTimesStep import ConstantTimesStep
 
 app = Flask(__name__)  # Create application instance.
 
@@ -118,20 +119,24 @@ def stupidifyFunction(function):
 # Return a list of steps.
 
 
-def getSteps(step, stepList):
-	steps = stepList
+def getSteps(step):
+	steps = []
 	log("Steps: " + repr(step))
 	if (type(step) is AddRule):
 		log("Appending add rule.")
-		steps.append(AddStep(step).getData())
+		substeps = []
 		for substep in step.substeps:
-			steps += getSteps(substep, [])
+			substeps.append(getSteps(substep))
+		steps.append((AddStep(step).getData(), substeps))
 	elif (type(step) is ConstantRule):
 		log("Appending constant rule.")
 		steps.append(ConstantStep(step).getData())
 	elif (type(step) is PowerRule):
 		log("Appending power rule.")
 		steps.append(PowerStep(step).getData())
+	elif (type(step) is ConstantTimesRule):
+		log("Appending constant times rule.")
+		steps.append((ConstantTimesStep(step).getData(), getSteps(step.substep)))
 	return steps
 
 @app.route("/api")
@@ -185,7 +190,7 @@ def index():
 	results["note"] = ""
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-	results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
+	results["steps"] = getSteps(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.
 	

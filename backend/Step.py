@@ -14,7 +14,7 @@
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
 PLACEHOLDER_VAR = "a"
-
+PLACEHOLDER_FCN = "f(x)"
 
 class Step:
 

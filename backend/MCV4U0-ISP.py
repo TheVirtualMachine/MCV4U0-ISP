@@ -35,7 +35,6 @@ app = Flask(__name__)  # Create application instance.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
 def parseInput(f, n, handed, lower, upper, plotSum):
-
 	try:
 		process_sympy(f)
 	except Exception:
@@ -73,16 +72,12 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 	return (f, n, handed, lower, upper, plotSum)
 
 # Convert the input function to a sympy function.
-
-
 def convertInput(function):
 	sympyedFunction = process_sympy(function).subs(e, E).subs("lambda", lamda)
 	return sp.sympify(str(sympyedFunction))
 
 # Stupidify the function by replacing constants and variables with actual
 # values.
-
-
 def stupidifyFunction(function):
 	function = function.evalf()
 

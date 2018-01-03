@@ -9,12 +9,12 @@ class MathEditor extends Component {
                 spaceBehavesLikeTab: true,
                 autoCommands: 'pi sqrt',
                 handlers: {
-                    edit: function () {
-                        console.log(field.latex());
-                    }
+                    edit: () => this
+                        .props
+                        .onChange(field.latex())
                 }
             });
-
+            field.write('x^2');
         } else {
             MQ.StaticMath(this.refs.span);
         }

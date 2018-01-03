@@ -1,24 +1,9 @@
 import React, {Component} from 'react';
-import {
-  Navbar,
-  Row,
-  Col,
-  Card,
-  Button,
-  Icon
-} from 'react-materialize';
+import {Navbar, Row, Col, Card} from 'react-materialize';
 import GrapherConfigPanel from './GrapherConfigPanel';
 import './HomePage.css';
 
 class HomePage extends Component {
-
-  GraphButton() {
-    return (
-      <Button waves='light' className='red'>Graph
-        <Icon left>show_chart</Icon>
-      </Button>
-    )
-  }
 
   render() {
     return (
@@ -26,7 +11,7 @@ class HomePage extends Component {
         <Navbar brand='Riemann Sum and Integral Calculator'></Navbar>
         <Row id="calculators">
           <Col s={12} m={6}>
-            <Card actions={[this.GraphButton()]}>
+            <Card>
               <GrapherConfigPanel/>
             </Card>
           </Col>

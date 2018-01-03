@@ -30,11 +30,11 @@ class UStep(Step):
 	# Initialize the step.
 	def __init__(self, step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)
-		self.uVar = latex(step.u_var)
-		self.uFunc = latex(step.u_func)
-		self.constant = latex(step.constant)
-		self.symbol = latex(step.symbol)
-		self.inverseConstant = latex(step.constant ** -1)
+		self.uVar = latex(self.step.u_var)
+		self.uFunc = latex(self.step.u_func)
+		self.constant = latex(self.step.constant)
+		self.symbol = latex(self.step.symbol)
+		self.inverseConstant = latex(self.step.constant ** -1)
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:

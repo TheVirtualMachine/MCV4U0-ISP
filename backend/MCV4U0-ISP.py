@@ -150,22 +150,21 @@ def graphRequest():
 	except Exception:
 		abort(400)
 
+	results = {}
+	results["note"] = ""
+	if (len(removedVariables) > 0):
+		results["note"] = "Assume that: "
+		for var in removedVariables[:-1]:
+			results["note"] += "\\({}\\), ".format(var)
+		results["note"] += "\\({} = 1\\).".format(removedVariables[-1])
+
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	try:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
+		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
 	except Exception:
 		abort(501)
 
-	# Format the results into a dictionary which later is converted to JSON.
-	results = {}
-	results["graph"] = graphImage
-
-	results["note"] = ""
-	if (len(removedVariables) > 0):
-		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-
-	#return graphImage
 	return json.JSONEncoder().encode(results) # Return the results.
 
 

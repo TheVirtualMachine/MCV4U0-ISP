@@ -74,11 +74,14 @@ def graph(
 	if plotSum:
 		plt.plot(sum_x, sum_y, 'red')
 	plt.xlim(lower, upper)
+
 	image = StringIO()
 	plt.savefig(image, format='svg')
 	image.seek(0)
-
 	svgText = image.getvalue()
+
 	plt.close()
 
-	return svgText
+	sumText = "Riemann sum: \\({}\\)".format(riemann_sum)
+
+	return (svgText, sumText)

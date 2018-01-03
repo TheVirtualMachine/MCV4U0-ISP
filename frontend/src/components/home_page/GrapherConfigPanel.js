@@ -10,6 +10,8 @@ import {
 } from 'react-materialize';
 import MathEditor from '../MathEditor';
 import {BlockPicker} from 'react-color';
+import 'whatwg-fetch';
+
 import './HomePage.css';
 
 const SWATCHES = [
@@ -55,8 +57,7 @@ class GrapherConfigPanel extends Component {
             posColor: 'blue',
             negColor: 'red',
             valid: {
-                // NOTE: those that are excluded have a 
-                //closed set of results or already reject
+                // NOTE: those that are excluded have a closed set of results or already reject
                 // invalid results.
                 equation: true,
                 lower: true,
@@ -71,10 +72,16 @@ class GrapherConfigPanel extends Component {
     }
 
     handleLimitChange(upper) {
+        //TODO: this is the ugliest function I've ever written and I'm sorry.
         return ({
             target
         }, val) => {
             let valid = !isNaN(val);
+            if (upper) {
+                valid = valid && val > this.state.lower;
+            } else {
+                valid = valid && this.state.upper > val;
+            }
             if (upper) {
                 this.setState((prevState) => {
                     return {
@@ -100,10 +107,10 @@ class GrapherConfigPanel extends Component {
             }
             this.setState(upper
                 ? {
-                    upper: Number.parseInt(val)
+                    upper: Number.parseInt(val, 10)
                 }
                 : {
-                    lower: Number.parseInt(val)
+                    lower: Number.parseInt(val, 10)
                 });
         };
     }
@@ -133,7 +140,33 @@ class GrapherConfigPanel extends Component {
     }
 
     submit() {
-        console.log(this.state);
+        const invalid_fields = Object
+            .entries(this.state.valid)
+            .filter(([key, val]) => !val);
+        const invalid_field_names = invalid_fields.map(([key, val]) => key);
+
+        if (invalid_fields.length > 0) {
+            //TODO: reject
+            alert('The following fields are invalid:\n', invalid_field_names.join(' '))
+        } else {
+            //TODO: graph/allow graph
+            let {
+                equation,
+                lower,
+                upper,
+                samples,
+                handed,
+                graphArea,
+                posColor,
+                negColor
+            } = this.state;
+            const request = `/api?f=${equation}&n=${samples}&handed=${handed}&lower=${lower}&upper=${upper}&sum=${graphArea}&pos=${posColor}&neg=${negColor}`;
+            console.log(request)
+            fetch(request)
+                .then(result => result.json())
+                .then(result => this.props.updatePageState(result))
+                .catch(error => alert(error)); //TODO: errortrap
+        }
     }
 
     render() {
@@ -171,7 +204,7 @@ class GrapherConfigPanel extends Component {
                         defaultValue={20}
                         id='upper-lim'
                         validate={this.state.valid.upper}
-                        className={!this.state.valid.upper && 'invalid'}/>
+                        className={(!this.state.valid.upper && 'invalid') || ''}/>
                 </Row>
                 <Row id='n-slider' className='range-field'>
                     <label htmlFor="n-slider">Number of samples</label>

@@ -34,7 +34,7 @@ app = Flask(__name__)  # Create application instance.
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
-def parseGraphInput(f, n, handed, lower, upper, plotSum):
+def parseGraphInput(f, n, handed, lower, upper, plotSum, posCol, negCol):
 	try:
 		process_sympy(f)
 	except Exception:
@@ -69,7 +69,7 @@ def parseGraphInput(f, n, handed, lower, upper, plotSum):
 			plotSum = None
 
 	# Return the input as a tuple.
-	return (f, n, handed, lower, upper, plotSum)
+	return (f, n, handed, lower, upper, plotSum, posCol, negCol)
 
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
@@ -134,15 +134,17 @@ def graphRequest():
 	lower = request.args.get("lower")
 	upper = request.args.get("upper")
 	plotSum = request.args.get("sum")
+	posCol = request.args.get("pos")
+	negCol = request.args.get("neg")
 
 	# Parse and error check the input.
-	parsed = parseGraphInput(f, n, handed, lower, upper, plotSum)
+	parsed = parseGraphInput(f, n, handed, lower, upper, plotSum, posCol, negCol)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
 
 	# Unpack the parsed tuple.
-	f, n, handed, lower, upper, plotSum = parsed
+	f, n, handed, lower, upper, plotSum, posCol, negCol = parsed
 
 	try:
 		sympyFunction = convertInput(f)
@@ -161,7 +163,7 @@ def graphRequest():
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	try:
-		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
+		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, posColor=posCol, negColor=negCol)
 	except Exception:
 		abort(501)
 

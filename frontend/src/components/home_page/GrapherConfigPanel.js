@@ -54,8 +54,8 @@ class GrapherConfigPanel extends Component {
             samples: 5,
             handed: 'left',
             graphArea: false,
-            posColor: 'blue',
-            negColor: 'red',
+            posColor: '#0000ff',
+            negColor: '#ff0000',
             valid: {
                 // NOTE: those that are excluded have a closed set of results or already reject
                 // invalid results.
@@ -116,15 +116,21 @@ class GrapherConfigPanel extends Component {
     }
 
     handleSampleChange({target}) {
-        this.setState({samples: target.value});
+        this.setState({
+            samples: target.value
+        }, () => this.updateGraph());
     }
 
     handleHandedChange(event, val) {
-        this.setState({handed: val});
+        this.setState({
+            handed: val
+        }, () => this.updateGraph());
     }
 
     handleGraphAreaChange(event, val) {
-        this.setState({graphArea: val});
+        this.setState({
+            graphArea: val
+        }, () => this.updateGraph());
     }
 
     handleColorChange(pos) {
@@ -139,6 +145,23 @@ class GrapherConfigPanel extends Component {
         };
     }
 
+    updateGraph() {
+        let {
+            equation,
+            lower,
+            upper,
+            samples,
+            handed,
+            graphArea,
+            posColor,
+            negColor
+        } = this.state;
+        const request = `/graph?f=${equation}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${posColor}&neg=${negColor}`;
+        fetch(request)
+            .then(result => result.text())
+            .then(result => this.props.updatePageState({graph: result}));
+    }
+
     submit() {
         const invalid_fields = Object
             .entries(this.state.valid)
@@ -150,21 +173,14 @@ class GrapherConfigPanel extends Component {
             alert('The following fields are invalid:\n', invalid_field_names.join(' '))
         } else {
             //TODO: graph/allow graph
-            let {
-                equation,
-                lower,
-                upper,
-                samples,
-                handed,
-                graphArea,
-                posColor,
-                negColor
-            } = this.state;
-            const request = `/api?f=${equation}&n=${samples}&handed=${handed}&lower=${lower}&upper=${upper}&sum=${graphArea}&pos=${posColor}&neg=${negColor}`;
-            console.log(request)
+            let {equation, lower, upper} = this.state;
+            const request = `/integrate?f=${equation}&lower=${lower}&upper=${upper}`;
             fetch(request)
                 .then(result => result.json())
-                .then(result => this.props.updatePageState(result))
+                .then(result => this.props.updatePageState({
+                    ...result
+                }))
+                .then(() => this.updateGraph())
                 .catch(error => alert(error)); //TODO: errortrap
         }
     }

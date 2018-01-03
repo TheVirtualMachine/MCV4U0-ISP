@@ -55,7 +55,8 @@ class GrapherConfigPanel extends Component {
             posColor: 'blue',
             negColor: 'red',
             valid: {
-                // NOTE: those that are excluded have a closed set of results or already reject
+                // NOTE: those that are excluded have a 
+                //closed set of results or already reject
                 // invalid results.
                 equation: true,
                 lower: true,

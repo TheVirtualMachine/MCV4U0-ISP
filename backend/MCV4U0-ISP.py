@@ -20,7 +20,7 @@ from sympy.abc import *
 
 from sympy.integrals.manualintegrate import *
 
-#import math
+# import math
 
 from latex2sympy.process_latex import process_sympy
 
@@ -44,9 +44,9 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 
     # Check and set the method of evaluating the Riemann sum.
     validHandedValues = ["left", "center", "centre", "right"]
-    if (handed is not None):
+    if handed is not None:
         handed = handed.lower()
-        if (handed not in validHandedValues):
+        if handed not in validHandedValues:
             handed = None
 
     # Check and set the evaluation bounds of the sum.
@@ -58,11 +58,10 @@ def parseInput(f, n, handed, lower, upper, plotSum):
         upper = None
 
     # Check and set the input for evaluating the running sum.
-    if (plotSum is not None):
-        if (plotSum.lower() in ("true", "false")):
-            plotSum = plotSum.lower() == "true"
-        else:
-            plotSum = None
+    try:
+        plotSum = bool(plotSum or 'false')
+    except ValueError:
+        plotSum = None
 
     # Return the input as a tuple.
     return (f, n, handed, lower, upper, plotSum)
@@ -98,7 +97,7 @@ def stupidifyFunction(function):
     # Replace variables in function with 1.
     removedVariables = []
     for var in variables:
-        if (sp.Symbol(var) in function.free_symbols):
+        if sp.Symbol(var) in function.free_symbols:
             function = function.subs(var, 1)
             removedVariables.append(var)
 
@@ -111,7 +110,7 @@ def stupidifyFunction(function):
 def getSteps(step, stepList):
     steps = []
     print("Steps: " + repr(step))
-    if (type(step) is ConstantRule):
+    if isinstance(step, ConstantRule):
         print(repr(step) + " is of type constant rule.")
         steps.append(ConstantStep(sp.latex(step.constant)).getData())
         return steps
@@ -134,7 +133,7 @@ def index():
     # Parse and error check the input.
     parsed = parseInput(f, n, handed, lower, upper, plotSum)
 
-    if (None in parsed):  # If there was an error parsing the input
+    if None in parsed:  # If there was an error parsing the input
         abort(400)
 
     # Unpack the parsed tuple.
@@ -156,7 +155,8 @@ def index():
         graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(
             lower), upper=float(upper), plotSum=plotSum)
     except:
-        # Send back "501 error" instead of actually having an error to aid in debugging.
+        # Send back "501 error" instead of actually
+        # having an error to aid in debugging.
         # I will change this to abort(501) later.
         graphImage = "501 error"
         # abort(501)
@@ -168,8 +168,10 @@ def index():
     results["graph"] = graphImage
     results["note"] = ""
     results["steps"] = getSteps(integral_steps(sympyFunction, x), [])
-    if (len(removedVariables) > 0):
-        results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + \
+    numRemoved = len(removedVariables)
+    if numRemoved > 0:
+        results["note"] = """The following variables had their values replaced with \
+         1 in order to graph the function: """ + \
             str(removedVariables)
 
     return json.JSONEncoder().encode(results)  # Return the results.

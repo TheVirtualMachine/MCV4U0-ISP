@@ -36,10 +36,11 @@ from ExpStep import ExpStep
 from ReciprocalStep import ReciprocalStep
 from UStep import UStep
 from RewriteStep import RewriteStep
+from PartsStep import PartsStep
 
 app = Flask(__name__)  # Create application instance.
 
-DEBUG_MODE = False
+DEBUG_MODE = True
 
 # Print to the console if in debug mode.
 def log(string):
@@ -163,10 +164,14 @@ def getSteps(step):
 	elif (type(step) is RewriteRule):
 		log("Appending rewrite rule.")
 		steps.append((RewriteStep(step).getData(), getSteps(step.substep)))
+	elif (type(step) is PartsRule):
+		log("Appending parts rule.")
+		# TODO: HANDLE VSTEP AND SECONDSTEP!
+		steps.append(PartsStep(step).getData())
 	else:
 		log("Appending don't know rule.")
 		if (type(step) is not DontKnowRule):
-			print("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
+			log("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
 		steps.append(DontKnowStep(step).getData())
 	return steps
 
@@ -222,6 +227,11 @@ def index():
 	results["note"] = ""
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
+
+	log("==========")
+	#log(len(integral_steps(sympyFunction, x).alternatives[1]))
+	log("==========")
+
 	results["steps"] = getSteps(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

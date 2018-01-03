@@ -18,7 +18,7 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "constant rule"
-RULE_FORMULA = "\\int {0} \\, dx = {0}x"
+RULE_FORMULA = "$$\\int {0} \\, dx = {0}x$$"
 
 class ConstantStep(Step):
 
@@ -29,4 +29,4 @@ class ConstantStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return "The {} says that {}.\nHere, {} = {}.\nSo, {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), PLACEHOLDER_CONST, self.constant, self.ruleFormula.format(self.constant))
+		return "The {} says that {}.\nHere, $${} = {}$$.\nSo, {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), PLACEHOLDER_CONST, self.constant, self.ruleFormula.format(self.constant))

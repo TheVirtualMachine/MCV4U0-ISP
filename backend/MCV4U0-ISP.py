@@ -165,7 +165,7 @@ def graphRequest():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	return graphImage
+	#return graphImage
 	return json.JSONEncoder().encode(results) # Return the results.
 
 

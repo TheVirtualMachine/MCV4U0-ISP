@@ -41,22 +41,22 @@ def getStepTree(step):
 		steps.append((AddStep(step).getData(), substeps))
 	elif (type(step) is ConstantRule):
 		logMessage("Appending constant rule.")
-		steps.append(ConstantStep(step).getData())
+		steps.append((ConstantStep(step).getData(), []))
 	elif (type(step) is PowerRule):
 		logMessage("Appending power rule.")
-		steps.append(PowerStep(step).getData())
+		steps.append((PowerStep(step).getData(), []))
 	elif (type(step) is ConstantTimesRule):
 		logMessage("Appending constant times rule.")
 		steps.append((ConstantTimesStep(step).getData(), getStepTree(step.substep)))
 	elif (type(step) is TrigRule):
 		logMessage("Appending trig rule.")
-		steps.append(TrigStep(step).getData())
+		steps.append((TrigStep(step).getData(), []))
 	elif (type(step) is ExpRule):
 		logMessage("Appending exp rule.")
-		steps.append(ExpStep(step).getData())
+		steps.append((ExpStep(step).getData(), []))
 	elif (type(step) is ReciprocalRule):
 		logMessage("Appending reciprocal rule.")
-		steps.append(ReciprocalStep(step).getData())
+		steps.append((ReciprocalStep(step).getData(), []))
 	elif (type(step) is URule):
 		logMessage("Appending u rule.")
 		steps.append((UStep(step).getData(), getStepTree(step.substep)))
@@ -72,5 +72,5 @@ def getStepTree(step):
 		logMessage("Appending don't know rule.")
 		if (type(step) is not DontKnowRule):
 			logMessage("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
-		steps.append(DontKnowStep(step).getData())
+		steps.append((DontKnowStep(step).getData(), []))
 	return steps

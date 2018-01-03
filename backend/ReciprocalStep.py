@@ -30,12 +30,12 @@ class ReciprocalStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR))
+		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR))
 		
 		if (self.symbol == PLACEHOLDER_VAR):
 			return rule
 
-		solution = "So, {}.".format(self.ruleFormula.format(self.symbol))
-		sub = "Here, {} = {}.".format(PLACEHOLDER_VAR, self.symbol)
+		solution = "So, $${}$$.".format(self.ruleFormula.format(self.symbol))
+		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_VAR, self.symbol)
 
 		return "{}\n{}\n{}".format(rule, sub, solution)

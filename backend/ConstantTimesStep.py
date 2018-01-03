@@ -34,7 +34,7 @@ class ConstantTimesStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR))
-		sub = "Here, {} = {} and {} = {}".format(PLACEHOLDER_CONST, self.constant, PLACEHOLDER_FCN, self.other)
-		solution = "So, {}".format(self.ruleFormula.format(self.constant, self.other, self.symbol))
+		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR))
+		sub = "Here, $${} = {}$$ and $${} = {}$$".format(PLACEHOLDER_CONST, self.constant, PLACEHOLDER_FCN, self.other)
+		solution = "So, $${}$$".format(self.ruleFormula.format(self.constant, self.other, self.symbol))
 		return "{}\n{}\n{}".format(rule, sub, solution)

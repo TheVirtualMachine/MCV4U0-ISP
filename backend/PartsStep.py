@@ -24,7 +24,7 @@ from Step import DUMMY_SYMBOL
 PARTS_VAR_1 = "u"
 PARTS_VAR_2 = "v"
 
-PARTS_FORMULA_1 = PARTS_VAR_1 + " = {}"
+PARTS_FORMULA_1 = "" + PARTS_VAR_1 + " = {}"
 PARTS_FORMULA_2 = "d" + PARTS_VAR_2 + " = {}"
 
 RULE_NAME = "parts rule"
@@ -52,24 +52,16 @@ class PartsStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2))
-		letStatement = "Let {} and let {}.".format(PARTS_FORMULA_1.format(self.u), PARTS_FORMULA_2.format(self.dv))
+		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2))
+		letStatement = "Let $${}$$ and let $${}$$.".format(PARTS_FORMULA_1.format(self.u), PARTS_FORMULA_2.format(self.dv))
 
 		duExpression = "d{} = {}".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
-		duStatement = "Differentiate {} to find that {}.".format(PARTS_VAR_1, duExpression)
+		duStatement = "Differentiate $${}$$ to find that $${}$$.".format(PARTS_VAR_1, duExpression)
 
-		dvIntegral = Integral(self.step.dv, stel.step.symbol)
+		dvIntegral = Integral(self.step.dv, self.step.symbol)
 
-		dvExpression = "{0} = \\int d{0} = {1} = {2}".format(PARTS_VAR_2, latex(dvIntegral), latex(dvIntegral.doit()))
-		dvStatement = "Next, we find {} as so: {}".format(PARTS_VAR_2, dvExpression)
+		dvExpression = "{0} = \\int d{0} = {1}".format(PARTS_VAR_2, latex(dvIntegral))
+		dvStatement = "Next, we find $${}$$ as so: $${}$$".format(PARTS_VAR_2, dvExpression)
 		
-		#uSub = "Let {}.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
-		#dxSub = "Then, {}.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
 
-		#integralFormula = latex(Integral(self.step.context))
-		#substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))
-
-		#solution = "So, {} = {}.".format(integralFormula, substitutedFormula)
-
-		return "Not implemented yet."
-		#return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)
+		return "{}\n{}\n{}\n{}".format(rule, letStatement, duStatement, dvStatement)

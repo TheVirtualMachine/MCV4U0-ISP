@@ -150,17 +150,13 @@ def index():
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
-	results["function"] = sp.latex(sympyFunction)
-	results["integral"] = sp.latex(indefiniteIntegral)
-	results["sum"] = sp.latex(definiteIntegral)
+	results["function"] = "$${}$$".format(sp.latex(sympyFunction))
+	results["integral"] = "$${}$$".format(sp.latex(indefiniteIntegral))
+	results["sum"] = "$${}$$".format(sp.latex(definiteIntegral))
 	results["graph"] = graphImage
 	results["note"] = ""
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-
-	logMessage("==========")
-	#logMessage(len(integral_steps(sympyFunction, x).alternatives[1]))
-	logMessage("==========")
 
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 

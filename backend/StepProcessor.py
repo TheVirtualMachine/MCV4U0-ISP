@@ -65,8 +65,9 @@ def getStepTree(step):
 		steps.append((RewriteStep(step).getData(), getStepTree(step.substep)))
 	elif (type(step) is PartsRule):
 		logMessage("Appending parts rule.")
-		# TODO: HANDLE VSTEP AND SECONDSTEP!
-		steps.append(PartsStep(step).getData())
+		partStep = PartsStep(step)
+		substeps = [getStepTree(step.v_step), getStepTree(step.second_step)]
+		steps.append((partStep.getData(), substeps))
 	else:
 		logMessage("Appending don't know rule.")
 		if (type(step) is not DontKnowRule):

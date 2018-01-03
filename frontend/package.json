@@ -4,14 +4,17 @@
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
+    "react-color": "^2.13.8",
     "react-dom": "^16.2.0",
     "react-materialize": "^1.1.2",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

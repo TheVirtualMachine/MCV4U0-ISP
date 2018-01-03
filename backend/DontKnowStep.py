@@ -36,13 +36,13 @@ class DontKnowStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		integralType = type(integrate(self.sympyFunction, x))
-		rule = "I don't know how to show you the steps to integrate {}.".format(self.function)
+		rule = "I don't know how to show you the steps to integrate $${}$$.".format(self.function)
 		step = ""
 		solution = ""
 		if (integralType is Integral or integralType is NonElementaryIntegral):
 			step = "Since I can't do this, we will just define the integral in terms of itself."
-			solution = "So, {}.".format(RULE_FORMULA.format(self.function))
+			solution = "So, $${}$$.".format(RULE_FORMULA.format(self.function))
 		else:
 			step = "I do know this integral, I just can't explain it."
-			solution = "Here it is: {}".format(RULE_DEFINED_FORMULA.format(self.function, latex(integrate(self.sympyFunction, x, manual=True))))
+			solution = "Here it is: $${}$$".format(RULE_DEFINED_FORMULA.format(self.function, latex(integrate(self.sympyFunction, x, manual=True))))
 		return "{}\n{}\n{}".format(rule, step, solution)

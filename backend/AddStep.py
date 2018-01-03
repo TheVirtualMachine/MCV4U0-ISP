@@ -19,7 +19,7 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "add rule"
-RULE_FORMULA = "$$\\int f(x) + g(x) \\, dx = \\int f(x) dx + \\int g(x) dx$$"
+RULE_FORMULA = "\\int f(x) + g(x) \\, dx = \\int f(x) dx + \\int g(x) dx"
 
 class AddStep(Step):
 
@@ -31,7 +31,7 @@ class AddStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		applyRule = "$$\\int {} dx =".format(self.formula)
+		applyRule = "\\int {} dx =".format(self.formula)
 
 		first = True
 		for substep in self.substeps:
@@ -41,6 +41,5 @@ class AddStep(Step):
 				first = False
 			else:
 				applyRule += " + \\int {} dx".format(latex(substep.context))
-		applyRule += "$$"
 		
-		return "The {} says that {}.\nThis means that we can integrate each term individually.\nSo, {}".format(self.ruleName, self.ruleFormula, applyRule)
+		return "The {} says that $${}$$.\nThis means that we can integrate each term individually.\nSo, $${}$$".format(self.ruleName, self.ruleFormula, applyRule)

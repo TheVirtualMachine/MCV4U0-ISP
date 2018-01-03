@@ -14,10 +14,6 @@
 
 from sympy import latex
 from sympy import integrate
-from sympy import sin
-from sympy import cos
-from sympy import csc
-from sympy import sec
 from sympy import Integral
 
 from Step import Step
@@ -37,4 +33,4 @@ class TrigStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return "The {} tells us that {}.".format(RULE_NAME, RULE_FORMULA.format(self.formula, self.argument, latex(integrate(self.step.context, self.step.arg))))
+		return "The {} tells us that $${}$$.".format(RULE_NAME, RULE_FORMULA.format(self.formula, self.argument, latex(integrate(self.step.context, self.step.arg))))

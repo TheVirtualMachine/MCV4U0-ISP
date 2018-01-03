@@ -38,14 +38,14 @@ class UStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
+		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula)
 		
-		uSub = "Let {}.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
-		dxSub = "Then, {}.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
+		uSub = "Let $${}$$.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
+		dxSub = "Then, $${}$$.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
 
 		integralFormula = latex(Integral(self.step.context))
 		substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))
 
-		solution = "So, {} = {}.".format(integralFormula, substitutedFormula)
+		solution = "So, $${} = {}$$.".format(integralFormula, substitutedFormula)
 
 		return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)

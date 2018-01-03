@@ -34,7 +34,7 @@ app = Flask(__name__)  # Create application instance.
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
-def parseInput(f, n, handed, lower, upper, plotSum):
+def parseGraphInput(f, n, handed, lower, upper, plotSum):
 	try:
 		process_sympy(f)
 	except Exception:
@@ -71,6 +71,26 @@ def parseInput(f, n, handed, lower, upper, plotSum):
 	# Return the input as a tuple.
 	return (f, n, handed, lower, upper, plotSum)
 
+# Parse input and do server-side checking.
+# Return parsed parameters as a tuple, converted to the correct types.
+# Parameters will be returned as "None" if they are invalid.
+def parseIntegrateInput(f, lower, upper):
+	try:
+		process_sympy(f)
+	except Exception:
+		f = None
+
+	# Check and set the evaluation bounds of the sum.
+	try:
+		lower = sp.Rational(lower)
+		upper = sp.Rational(upper)
+	except TypeError:
+		lower = None
+		upper = None
+
+	# Return the input as a tuple.
+	return (f, lower, upper)
+
 # Convert the input function to a sympy function.
 def convertInput(function):
 	sympyedFunction = process_sympy(function).subs(e, E).subs("lambda", lamda)
@@ -105,11 +125,8 @@ def stupidifyFunction(function):
 	# Return function and list of removed variables as a tuple.
 	return (function, removedVariables)
 
-@app.route("/api")
-def index():
-	logMessage("")
-	logMessage("")
-	logMessage("")
+@app.route("/graph")
+def graphRequest():
 	# Read the input.
 	f = request.args.get("f")
 	n = request.args.get("n")
@@ -119,13 +136,54 @@ def index():
 	plotSum = request.args.get("sum")
 
 	# Parse and error check the input.
-	parsed = parseInput(f, n, handed, lower, upper, plotSum)
+	parsed = parseGraphInput(f, n, handed, lower, upper, plotSum)
 
 	if (None in parsed): # If there was an error parsing the input
 		abort(400)
 
 	# Unpack the parsed tuple.
 	f, n, handed, lower, upper, plotSum = parsed
+
+	try:
+		sympyFunction = convertInput(f)
+		stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
+	except Exception:
+		abort(400)
+
+	# Graph the image.
+	lambdaFunction = sp.lambdify(x, stupidFunction)
+	try:
+		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
+	except Exception:
+		abort(501)
+
+	# Format the results into a dictionary which later is converted to JSON.
+	results = {}
+	results["graph"] = graphImage
+
+	results["note"] = ""
+	if (len(removedVariables) > 0):
+		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
+
+	return graphImage
+	return json.JSONEncoder().encode(results) # Return the results.
+
+
+@app.route("/integrate")
+def integrateRequest():
+	# Read the input.
+	f = request.args.get("f")
+	lower = request.args.get("lower")
+	upper = request.args.get("upper")
+
+	# Parse and error check the input.
+	parsed = parseIntegrateInput(f, lower, upper)
+
+	if (None in parsed): # If there was an error parsing the input
+		abort(400)
+
+	# Unpack the parsed tuple.
+	f, lower, upper = parsed
 
 	# Create the functions.
 	try:
@@ -138,30 +196,11 @@ def index():
 	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
 	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
 
-	# Graph the image.
-	lambdaFunction = sp.lambdify(x, stupidFunction)
-	try:
-		graphImage = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum)
-	except Exception:
-		# Send back "501 error" instead of actually having an error to aid in debugging.
-		# I will change this to abort(501) later.
-		graphImage = "501 error"
-		#abort(501)
-
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
-	results["function"] = sp.latex(sympyFunction)
-	results["integral"] = sp.latex(indefiniteIntegral)
-	results["sum"] = sp.latex(definiteIntegral)
-	results["graph"] = graphImage
-	results["note"] = ""
-	if (len(removedVariables) > 0):
-		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
-
-	logMessage("==========")
-	#logMessage(len(integral_steps(sympyFunction, x).alternatives[1]))
-	logMessage("==========")
-
+	results["function"] = "$${}$$".format(sp.latex(sympyFunction))
+	results["integral"] = "$${}$$".format(sp.latex(indefiniteIntegral))
+	results["sum"] = "$${}$$".format(sp.latex(definiteIntegral))
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

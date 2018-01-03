@@ -32,6 +32,6 @@ class RewriteStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
-		solution = "We will write {} as {} and then integrate this.".format(self.original, self.rewritten)
+		solution = "We will write $${}$$ as $${}$$ and then integrate this.".format(self.original, self.rewritten)
 
 		return "{}\n{}".format(rule, solution)

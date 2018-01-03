@@ -5,6 +5,13 @@ import './HomePage.css';
 
 class HomePage extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      payload: {}
+    }
+  }
+
   render() {
     return (
       <div className="HomePage">
@@ -12,12 +19,18 @@ class HomePage extends Component {
         <Row id="calculators">
           <Col s={12} m={6}>
             <Card>
-              <GrapherConfigPanel/>
+              <GrapherConfigPanel
+                updatePageState={this
+                .setState
+                .bind(this)}/>
             </Card>
           </Col>
           <Col s={12} m={6}>
             <Card>
-              B
+              <div
+                dangerouslySetInnerHTML={{
+                __html: this.state.graph
+              }}></div>
             </Card>
           </Col>
         </Row>

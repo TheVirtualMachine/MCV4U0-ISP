@@ -117,11 +117,8 @@ def getSteps(step, stepList):
     return steps
 
 
-@app.route("/")
+@app.route("/api")
 def index():
-    print()
-    print()
-    print()
     # Read the input.
     f = request.args.get("f")
     n = request.args.get("n")
@@ -177,4 +174,4 @@ def index():
     return json.JSONEncoder().encode(results)  # Return the results.
 
 
-app.run(debug=True)
+app.run(debug=True, port=5000)

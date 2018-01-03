@@ -104,8 +104,7 @@ def stupidifyFunction(function):
 	# List of possible variables.
 	variables = list(string.ascii_letters) + list(greeks)
 
-	# Lambda is a reserved word in Python, so SymPy uses the alternate
-	# spelling of "lamda".
+	# Lambda is a reserved word in Python, so SymPy uses the alternate spelling of "lamda".
 	variables.remove("lambda")
 	variables.append("lamda")
 
@@ -117,10 +116,10 @@ def stupidifyFunction(function):
 
 	# Replace variables in function with 1.
 	removedVariables = []
-	for var in variables:
-		if (sp.Symbol(var) in function.free_symbols):
-			function = function.subs(var, 1)
-			removedVariables.append(var)
+	for sym in function.free_symbols:
+		if (str(sym) in variables):
+			removedVariables.append(sp.latex(sym))
+			function = function.subs(sym, 1)
 
 	# Return function and list of removed variables as a tuple.
 	return (function, removedVariables)
@@ -155,10 +154,10 @@ def graphRequest():
 	results = {}
 	results["note"] = ""
 	if (len(removedVariables) > 0):
-		results["note"] = "Assume that: "
+		results["note"] = "Assume that: \\("
 		for var in removedVariables[:-1]:
-			results["note"] += "\\({}\\), ".format(var)
-		results["note"] += "\\({} = 1\\).".format(removedVariables[-1])
+			results["note"] += "{},".format(var)
+		results["note"] += "{} = 1\\).".format(removedVariables[-1])
 
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)

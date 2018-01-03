@@ -22,8 +22,8 @@ from Step import PLACEHOLDER_CONST
 from Step import PLACEHOLDER_VAR
 
 RULE_NAME = "exponent rule"
-RULE_FORMULA = "$$\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\log ({0}) }}$$"
-RULE_RESTRICTION = "$${0} \\neq 1$$"
+RULE_FORMULA = "\\int {0}^{1} \\, dx = \\frac{{ {0}^{1} }}{{ \\log ({0}) }}"
+RULE_RESTRICTION = "{0} \\neq 1"
 
 class ExpStep(Step):
 
@@ -37,7 +37,7 @@ class ExpStep(Step):
 
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_CONST))
+		rule = "The {} says that $${}$$ as long as $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_CONST))
 		sub = "Here, $${} = {}$$ and $${} = {}$$.".format(PLACEHOLDER_CONST, self.base, PLACEHOLDER_VAR, self.exponent)
-		solution = "So, {}".format(self.ruleFormula.format(self.base, self.exponent))
+		solution = "So, $${}$$".format(self.ruleFormula.format(self.base, self.exponent))
 		return "{}\n{}\n{}".format(rule, sub, solution)

@@ -22,8 +22,8 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "don't know rule"
-RULE_FORMULA = "$$\\int {0} \\, dx = \\int {0} \\, dx$$"
-RULE_DEFINED_FORMULA = "$$\\int {0} \\, dx = {1}$$"
+RULE_FORMULA = "\\int {0} \\, dx = \\int {0} \\, dx"
+RULE_DEFINED_FORMULA = "\\int {0} \\, dx = {1}"
 
 class DontKnowStep(Step):
 
@@ -41,8 +41,8 @@ class DontKnowStep(Step):
 		solution = ""
 		if (integralType is Integral or integralType is NonElementaryIntegral):
 			step = "Since I can't do this, we will just define the integral in terms of itself."
-			solution = "So, {}.".format(RULE_FORMULA.format(self.function))
+			solution = "So, $${}$$.".format(RULE_FORMULA.format(self.function))
 		else:
 			step = "I do know this integral, I just can't explain it."
-			solution = "Here it is: {}".format(RULE_DEFINED_FORMULA.format(self.function, latex(integrate(self.sympyFunction, x, manual=True))))
+			solution = "Here it is: $${}$$".format(RULE_DEFINED_FORMULA.format(self.function, latex(integrate(self.sympyFunction, x, manual=True))))
 		return "{}\n{}\n{}".format(rule, step, solution)

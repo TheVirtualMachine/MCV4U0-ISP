@@ -22,8 +22,8 @@ from Step import DUMMY_SYMBOL
 
 RULE_NAME = "u rule"
 RULE_FORMULA = "we can substitute in dummy variables to help us find the integral"
-SUB_FORMULA_1 = "$$d{0} = {1}d{2}$$"
-SUB_FORMULA_2 = "$$d{2} = {1}d{0}$$"
+SUB_FORMULA_1 = "d{0} = {1}d{2}"
+SUB_FORMULA_2 = "d{2} = {1}d{0}"
 
 class UStep(Step):
 
@@ -38,10 +38,10 @@ class UStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
+		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula)
 		
-		uSub = "Let {}.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
-		dxSub = "Then, {}.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
+		uSub = "Let $${}$$.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
+		dxSub = "Then, $${}$$.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
 
 		integralFormula = latex(Integral(self.step.context))
 		substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))

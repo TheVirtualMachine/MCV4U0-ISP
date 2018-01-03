@@ -58,18 +58,10 @@ class PartsStep(Step):
 		duExpression = "d{} = {}".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
 		duStatement = "Differentiate $${}$$ to find that $${}$$.".format(PARTS_VAR_1, duExpression)
 
-		dvIntegral = Integral(self.step.dv, stel.step.symbol)
+		dvIntegral = Integral(self.step.dv, self.step.symbol)
 
-		dvExpression = "{0} = \\int d{0} = {1} = {2}".format(PARTS_VAR_2, latex(dvIntegral), latex(dvIntegral.doit()))
+		dvExpression = "{0} = \\int d{0} = {1}".format(PARTS_VAR_2, latex(dvIntegral))
 		dvStatement = "Next, we find $${}$$ as so: $${}$$".format(PARTS_VAR_2, dvExpression)
 		
-		#uSub = "Let {}.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
-		#dxSub = "Then, {}.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
 
-		#integralFormula = latex(Integral(self.step.context))
-		#substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))
-
-		#solution = "So, {} = {}.".format(integralFormula, substitutedFormula)
-
-		return "Not implemented yet."
-		#return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)
+		return "{}\n{}\n{}\n{}".format(rule, letStatement, duStatement, dvStatement)

@@ -158,10 +158,6 @@ def index():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	logMessage("==========")
-	#logMessage(len(integral_steps(sympyFunction, x).alternatives[1]))
-	logMessage("==========")
-
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

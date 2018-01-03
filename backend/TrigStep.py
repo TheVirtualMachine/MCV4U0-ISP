@@ -24,7 +24,7 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "trig rule"
-RULE_FORMULA = "\\int {0} \\, d{1} = {2}"
+RULE_FORMULA = "$$\\int {0} \\, d{1} = {2}$$"
 
 
 class TrigStep(Step):

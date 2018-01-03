@@ -19,7 +19,7 @@ from Step import Step
 from Step import PLACEHOLDER_VAR
 
 RULE_NAME = "reciprocal rule"
-RULE_FORMULA = "\\int \\frac{{ 1 }}{{ {0} }} \\, d{0} = \\log \\left ( {0} \\right)"
+RULE_FORMULA = "$$\\int \\frac{{ 1 }}{{ {0} }} \\, d{0} = \\log \\left ( {0} \\right)$$"
 
 class ReciprocalStep(Step):
 
@@ -36,6 +36,6 @@ class ReciprocalStep(Step):
 			return rule
 
 		solution = "So, {}.".format(self.ruleFormula.format(self.symbol))
-		sub = "Here, {} = {}.".format(PLACEHOLDER_VAR, self.symbol)
+		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_VAR, self.symbol)
 
 		return "{}\n{}\n{}".format(rule, sub, solution)

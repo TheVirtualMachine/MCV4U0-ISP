@@ -21,8 +21,9 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "power rule"
-RULE_FORMULA = "\\int x^{0} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }}"
-RULE_RESTRICTION = "{0} \\neq -1"
+RULE_FORMULA = "$$\\int x^{0} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }}$$"
+RULE_FORMULA_FULL = "$$\\int x^{0} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }} = {1}$$"
+RULE_RESTRICTION = "$${0} \\neq -1$$"
 
 class PowerStep(Step):
 
@@ -36,6 +37,6 @@ class PowerStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), self.ruleRestriction.format(PLACEHOLDER_CONST))
-		sub = "Here, {} = {}.".format(PLACEHOLDER_CONST, self.exponent)
-		solution = "So, {} = {}".format(self.ruleFormula.format(self.exponent), latex(integrate(self.formula, x, manual=True)))
+		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_CONST, self.exponent)
+		solution = "So, {}".format(self.ruleFormula.format(self.exponent, latex(integrate(self.formula, x, manual=True))))
 		return "{}\n{}\n{}".format(rule, sub, solution)

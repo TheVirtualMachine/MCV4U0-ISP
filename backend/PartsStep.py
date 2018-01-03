@@ -24,11 +24,11 @@ from Step import DUMMY_SYMBOL
 PARTS_VAR_1 = "u"
 PARTS_VAR_2 = "v"
 
-PARTS_FORMULA_1 = PARTS_VAR_1 + " = {}"
-PARTS_FORMULA_2 = "d" + PARTS_VAR_2 + " = {}"
+PARTS_FORMULA_1 = "$$" + PARTS_VAR_1 + " = {}$$"
+PARTS_FORMULA_2 = "$$d" + PARTS_VAR_2 + " = {}$$"
 
 RULE_NAME = "parts rule"
-RULE_FORMULA = "\\int {0}d{1} = {0}{1} - \\int {1}d{0}"
+RULE_FORMULA = "$$\\int {0}d{1} = {0}{1} - \\int {1}d{0}$$"
 
 class PartsStep(Step):
 
@@ -55,8 +55,8 @@ class PartsStep(Step):
 		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2))
 		letStatement = "Let {} and let {}.".format(PARTS_FORMULA_1.format(self.u), PARTS_FORMULA_2.format(self.dv))
 
-		duExpression = "d{} = {}".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
-		duStatement = "Differentiate {} to find that {}.".format(PARTS_VAR_1, duExpression)
+		duExpression = "$$d{} = {}$$".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
+		duStatement = "Differentiate $${}$$ to find that {}.".format(PARTS_VAR_1, duExpression)
 
 		dvIntegral = Integral(self.step.dv, stel.step.symbol)
 

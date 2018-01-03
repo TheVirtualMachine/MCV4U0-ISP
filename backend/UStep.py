@@ -22,8 +22,8 @@ from Step import DUMMY_SYMBOL
 
 RULE_NAME = "u rule"
 RULE_FORMULA = "we can substitute in dummy variables to help us find the integral"
-SUB_FORMULA_1 = "d{0} = {1}d{2}"
-SUB_FORMULA_2 = "d{2} = {1}d{0}"
+SUB_FORMULA_1 = "$$d{0} = {1}d{2}$$"
+SUB_FORMULA_2 = "$$d{2} = {1}d{0}$$"
 
 class UStep(Step):
 
@@ -46,6 +46,6 @@ class UStep(Step):
 		integralFormula = latex(Integral(self.step.context))
 		substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))
 
-		solution = "So, {} = {}.".format(integralFormula, substitutedFormula)
+		solution = "So, $${} = {}$$.".format(integralFormula, substitutedFormula)
 
 		return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)

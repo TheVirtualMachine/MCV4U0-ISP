@@ -22,8 +22,8 @@ from Step import Step
 from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "don't know rule"
-RULE_FORMULA = "\\int {0} \\, dx = \\int {0} \\, dx"
-RULE_DEFINED_FORMULA = "\\int {0} \\, dx = {1}"
+RULE_FORMULA = "$$\\int {0} \\, dx = \\int {0} \\, dx$$"
+RULE_DEFINED_FORMULA = "$$\\int {0} \\, dx = {1}$$"
 
 class DontKnowStep(Step):
 
@@ -36,7 +36,7 @@ class DontKnowStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		integralType = type(integrate(self.sympyFunction, x))
-		rule = "I don't know how to show you the steps to integrate {}.".format(self.function)
+		rule = "I don't know how to show you the steps to integrate $${}$$.".format(self.function)
 		step = ""
 		solution = ""
 		if (integralType is Integral or integralType is NonElementaryIntegral):

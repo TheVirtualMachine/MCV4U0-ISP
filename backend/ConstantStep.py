@@ -20,7 +20,6 @@ from Step import PLACEHOLDER_CONST
 RULE_NAME = "constant rule"
 RULE_FORMULA = "\\int {0} \\, dx = {0}x"
 
-
 class ConstantStep(Step):
 
 	# Initialize the step.

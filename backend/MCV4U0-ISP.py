@@ -13,45 +13,27 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from Debug import logMessage
+from Debug import DEBUG_MODE
+
 import json
 from flask import Flask, request, abort
+
 import sympy as sp
 from sympy.abc import *
-
-from sympy.integrals.manualintegrate import *
-
-#import math
+from sympy.integrals.manualintegrate import integral_steps
 
 from latex2sympy.process_latex import process_sympy
 
 from RiemannGrapher import graph
 
-from ConstantStep import ConstantStep
-from AddStep import AddStep
-from PowerStep import PowerStep
-from ConstantTimesStep import ConstantTimesStep
-from DontKnowStep import DontKnowStep
-from TrigStep import TrigStep
-from ExpStep import ExpStep
-from ReciprocalStep import ReciprocalStep
-from UStep import UStep
-from RewriteStep import RewriteStep
-from PartsStep import PartsStep
+from StepProcessor import getStepTree
 
 app = Flask(__name__)  # Create application instance.
-
-DEBUG_MODE = True
-
-# Print to the console if in debug mode.
-def log(string):
-	if (DEBUG_MODE):
-		print(string)
 
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
 # Parameters will be returned as "None" if they are invalid.
-
-
 def parseInput(f, n, handed, lower, upper, plotSum):
 
 	try:
@@ -128,58 +110,11 @@ def stupidifyFunction(function):
 	# Return function and list of removed variables as a tuple.
 	return (function, removedVariables)
 
-# Return a list of steps.
-
-
-def getSteps(step):
-	steps = []
-	log("Steps: " + repr(step))
-	if (type(step) is AddRule):
-		log("Appending add rule.")
-		substeps = []
-		for substep in step.substeps:
-			substeps.append(getSteps(substep))
-		steps.append((AddStep(step).getData(), substeps))
-	elif (type(step) is ConstantRule):
-		log("Appending constant rule.")
-		steps.append(ConstantStep(step).getData())
-	elif (type(step) is PowerRule):
-		log("Appending power rule.")
-		steps.append(PowerStep(step).getData())
-	elif (type(step) is ConstantTimesRule):
-		log("Appending constant times rule.")
-		steps.append((ConstantTimesStep(step).getData(), getSteps(step.substep)))
-	elif (type(step) is TrigRule):
-		log("Appending trig rule.")
-		steps.append(TrigStep(step).getData())
-	elif (type(step) is ExpRule):
-		log("Appending exp rule.")
-		steps.append(ExpStep(step).getData())
-	elif (type(step) is ReciprocalRule):
-		log("Appending reciprocal rule.")
-		steps.append(ReciprocalStep(step).getData())
-	elif (type(step) is URule):
-		log("Appending u rule.")
-		steps.append((UStep(step).getData(), getSteps(step.substep)))
-	elif (type(step) is RewriteRule):
-		log("Appending rewrite rule.")
-		steps.append((RewriteStep(step).getData(), getSteps(step.substep)))
-	elif (type(step) is PartsRule):
-		log("Appending parts rule.")
-		# TODO: HANDLE VSTEP AND SECONDSTEP!
-		steps.append(PartsStep(step).getData())
-	else:
-		log("Appending don't know rule.")
-		if (type(step) is not DontKnowRule):
-			log("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
-		steps.append(DontKnowStep(step).getData())
-	return steps
-
 @app.route("/api")
 def index():
-	log("")
-	log("")
-	log("")
+	logMessage("")
+	logMessage("")
+	logMessage("")
 	# Read the input.
 	f = request.args.get("f")
 	n = request.args.get("n")
@@ -228,11 +163,11 @@ def index():
 	if (len(removedVariables) > 0):
 		results["note"] = "The following variables had their values replaced with 1 in order to graph the function: " + str(removedVariables)
 
-	log("==========")
-	#log(len(integral_steps(sympyFunction, x).alternatives[1]))
-	log("==========")
+	logMessage("==========")
+	#logMessage(len(integral_steps(sympyFunction, x).alternatives[1]))
+	logMessage("==========")
 
-	results["steps"] = getSteps(integral_steps(sympyFunction, x))
+	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.
 	

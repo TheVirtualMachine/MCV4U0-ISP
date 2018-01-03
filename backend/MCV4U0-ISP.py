@@ -15,9 +15,11 @@
 
 from Debug import logMessage
 from Debug import DEBUG_MODE
+import time
 
 import json
 from flask import Flask, request, abort
+from flask_caching import Cache
 
 import sympy as sp
 from sympy.abc import *
@@ -30,6 +32,7 @@ from RiemannGrapher import graph
 from StepProcessor import getStepTree
 
 app = Flask(__name__)  # Create application instance.
+cache = Cache(app, config={"CACHE_TYPE": "simple"})
 
 # Parse input and do server-side checking.
 # Return parsed parameters as a tuple, converted to the correct types.
@@ -124,17 +127,9 @@ def stupidifyFunction(function):
 	# Return function and list of removed variables as a tuple.
 	return (function, removedVariables)
 
-@app.route("/graph")
-def graphRequest():
-	# Read the input.
-	f = request.args.get("f")
-	n = request.args.get("n")
-	handed = request.args.get("handed")
-	lower = request.args.get("lower")
-	upper = request.args.get("upper")
-	plotSum = request.args.get("sum")
-	posCol = request.args.get("pos")
-	negCol = request.args.get("neg")
+@cache.memoize(60)
+def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
+	logMessage("Graphing")
 
 	# Parse and error check the input.
 	parsed = parseGraphInput(f, n, handed, lower, upper, plotSum, posCol, negCol)
@@ -165,16 +160,31 @@ def graphRequest():
 		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
 	except Exception:
 		abort(501)
-
+	return results["graph"]
 	return json.JSONEncoder().encode(results) # Return the results.
 
+@app.route("/graph")
+def graphRequest():
+	startTime = time.time()
 
-@app.route("/integrate")
-def integrateRequest():
 	# Read the input.
 	f = request.args.get("f")
+	n = request.args.get("n")
+	handed = request.args.get("handed")
 	lower = request.args.get("lower")
 	upper = request.args.get("upper")
+	plotSum = request.args.get("sum")
+	posCol = request.args.get("pos")
+	negCol = request.args.get("neg")
+
+	result = doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol)
+	endTime = time.time()
+	logMessage("Graph time: {}".format(endTime - startTime))
+	return result
+
+@cache.memoize(60)
+def doIntegration(f, lower, upper):
+	logMessage("Integrating")
 
 	# Parse and error check the input.
 	parsed = parseIntegrateInput(f, lower, upper)
@@ -204,5 +214,19 @@ def integrateRequest():
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.
+
+@app.route("/integrate")
+def integrateRequest():
+	startTime = time.time()
+
+	# Read the input.
+	f = request.args.get("f")
+	lower = request.args.get("lower")
+	upper = request.args.get("upper")
+	
+	result = doIntegration(f, lower, upper)
+	endTime = time.time()
+	logMessage("Integration time: {}".format(endTime - startTime))
+	return result
 	
 app.run(debug=DEBUG_MODE)

@@ -27,8 +27,8 @@ def graph(
 		handed: str = 'left',
 		lower: float = 0,
 		upper: float = 20,
-		posColor: str = 'blue',
-		negColor: str = 'red',
+		pos_color: str = 'blue',
+		neg_color: str = 'red',
 		plotSum: bool = False):
 	'''graphs a function, along with a Riemann sum.'''
 

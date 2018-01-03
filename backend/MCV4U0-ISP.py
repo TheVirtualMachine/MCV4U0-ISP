@@ -163,7 +163,7 @@ def graphRequest():
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	try:
-		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, posColor=posCol, negColor=negCol)
+		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
 	except Exception:
 		abort(501)
 

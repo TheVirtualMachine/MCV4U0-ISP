@@ -32,7 +32,7 @@ from PartsStep import PartsStep
 # Return a list of steps.
 def getStepTree(step):
 	steps = []
-	logMessage("Steps: " + repr(step))
+	logMessage("Getting step tree of: {}.".format(step))
 	if (type(step) is AddRule):
 		logMessage("Appending add rule.")
 		substeps = []

@@ -35,7 +35,7 @@ class DontKnowStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		integralType = type(integrate(self.sympyFunction, x))
+		integralType = type(integrate(self.sympyFunction, x, manual=True))
 		rule = "I don't know how to show you the steps to integrate $${}$$.".format(self.function)
 		step = ""
 		solution = ""

@@ -30,13 +30,13 @@ class PowerStep(Step):
 	# Initialize the step.
 	def __init__(self, step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)
+		self.ruleFormulaFull = RULE_FORMULA_FULL
 		self.exponent = latex(self.step.exp)
 		self.ruleRestriction = RULE_RESTRICTION
-		self.formula = self.step.context
 
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), self.ruleRestriction.format(PLACEHOLDER_CONST))
 		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_CONST, self.exponent)
-		solution = "So, $${}$$".format(self.ruleFormula.format(self.exponent, latex(integrate(self.formula, x, manual=True))))
+		solution = "So, $${}$$".format(self.ruleFormulaFull.format(self.exponent, latex(integrate(self.step.context, x)) ))
 		return "{}\n{}\n{}".format(rule, sub, solution)

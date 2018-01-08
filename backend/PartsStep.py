@@ -32,14 +32,6 @@ RULE_FORMULA = "\\int {0}d{1} = {0}{1} - \\int {1}d{0}"
 
 class PartsStep(Step):
 
-	# x * e**x
-	# u=x
-	# dv=exp(x)
-	# v_step=ExpRule(base=E, exp=x, context=exp(x), symbol=x)
-	# second_step=ExpRule(base=E, exp=x, context=exp(x), symbol=x)
-	# context=x*exp(x)
-	# symbol=x
-
 	# Initialize the step.
 	def __init__(self, step):
 		super().__init__(step, RULE_NAME, RULE_FORMULA)

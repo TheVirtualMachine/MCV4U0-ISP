@@ -160,7 +160,6 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
 	except Exception:
 		abort(501)
-	return results["graph"]
 	return json.JSONEncoder().encode(results) # Return the results.
 
 @app.route("/graph")

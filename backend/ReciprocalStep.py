@@ -1,3 +1,6 @@
+# MCV4U0 ISP is a program to teach integration using CAS systems and tables.
+# Copyright (C) 2018 Vincent Macri and Oliver Daniel
+#
 # This file is part of MCV4U0 ISP.
 #
 # MCV4U0 ISP is free software: you can redistribute it and/or modify

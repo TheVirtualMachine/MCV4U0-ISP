@@ -156,11 +156,12 @@ class GrapherConfigPanel extends Component {
             posColor,
             negColor
         } = this.state;
-        const request = `/graph?f=${equation}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${posColor}&neg=${negColor}`;
+        const request = `/graph?f=${equation}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
         console.log(request)
         fetch(request)
             .then(result => result.json())
-            .then(result => this.props.updatePageState({...result}));
+            .then(result => this.props.updatePageState({...result}))
+            .catch(error => console.log(error));
     }
 
     submit() {

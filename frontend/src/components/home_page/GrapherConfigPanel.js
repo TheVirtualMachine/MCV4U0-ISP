@@ -157,9 +157,10 @@ class GrapherConfigPanel extends Component {
             negColor
         } = this.state;
         const request = `/graph?f=${equation}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${posColor}&neg=${negColor}`;
+        console.log(request)
         fetch(request)
-            .then(result => result.text())
-            .then(result => this.props.updatePageState({graph: result}));
+            .then(result => result.json())
+            .then(result => this.props.updatePageState({...result}));
     }
 
     submit() {

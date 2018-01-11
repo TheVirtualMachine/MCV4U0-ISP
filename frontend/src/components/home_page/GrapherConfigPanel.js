@@ -156,7 +156,7 @@ class GrapherConfigPanel extends Component {
             posColor,
             negColor
         } = this.state;
-        const request = `/graph?f=${equation}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
+        const request = `/graph?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
         console.log(request)
         fetch(request)
             .then(result => result.json())
@@ -176,7 +176,8 @@ class GrapherConfigPanel extends Component {
         } else {
             //TODO: graph/allow graph
             let {equation, lower, upper} = this.state;
-            const request = `/integrate?f=${equation}&lower=${lower}&upper=${upper}`;
+            const request = `/integrate?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}`;
+            console.log(request);
             fetch(request)
                 .then(result => result.json())
                 .then(result => this.props.updatePageState({

@@ -31,6 +31,11 @@ class HomePage extends Component {
                 dangerouslySetInnerHTML={{
                 __html: this.state.graph
               }}></div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: this.state.note
+                }}>
+              </div>
             </Card>
           </Col>
         </Row>

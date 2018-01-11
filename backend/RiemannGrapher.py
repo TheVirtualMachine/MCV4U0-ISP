@@ -66,7 +66,7 @@ def graph(
 				width,
 				val,
 				alpha=0.5,
-				color=pos_color if val > 0 else neg_color
+				color=pos_color if val >= 0 else neg_color
 			)
 		)
 		riemann_sum += width * val

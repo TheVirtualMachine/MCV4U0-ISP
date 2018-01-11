@@ -137,7 +137,9 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 	# Parse and error check the input.
 	parsed = parseGraphInput(f, n, handed, lower, upper, plotSum, posCol, negCol)
 
+	print(parsed)
 	if (None in parsed): # If there was an error parsing the input
+		print("400 error")
 		abort(400)
 
 	# Unpack the parsed tuple.
@@ -147,7 +149,8 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 		sympyFunction = convertInput(f)
 		stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 	except Exception:
-		abort(400)
+		print("501 error")
+		abort(501)
 
 	results = {}
 	results["note"] = ""
@@ -162,6 +165,7 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 	try:
 		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
 	except Exception:
+		print("501 error")
 		abort(501)
 	return json.JSONEncoder().encode(results) # Return the results.
 
@@ -192,6 +196,7 @@ def doIntegration(f, lower, upper):
 	parsed = parseIntegrateInput(f, lower, upper)
 
 	if (None in parsed): # If there was an error parsing the input
+		print("400 error")
 		abort(400)
 
 	# Unpack the parsed tuple.
@@ -202,7 +207,8 @@ def doIntegration(f, lower, upper):
 		sympyFunction = convertInput(f)
 		stupidFunction, removedVariables = stupidifyFunction(sympyFunction)
 	except Exception:
-		abort(400)
+		print("501 error")
+		abort(501)
 
 	# Calculate the integrals.
 	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)

@@ -211,8 +211,8 @@ def doIntegration(f, lower, upper):
 		abort(501)
 
 	# Calculate the integrals.
-	indefiniteIntegral = sp.integrate(sympyFunction, x, manual=True)
-	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper), manual=True)
+	indefiniteIntegral = sp.integrate(sympyFunction, x)
+	definiteIntegral = sp.integrate(sympyFunction, (x, lower, upper))
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}

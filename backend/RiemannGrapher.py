@@ -58,7 +58,7 @@ def graph(
 	sum_y = []
 
 	fig, ax = plt.subplots(1)
-	for i in np.linspace(lower, upper, num=n):
+	for i in np.linspace(lower, upper + 1, num=n):
 		val = f(i + offset)
 		ax.add_patch(
 			patches.Rectangle(

@@ -2,7 +2,7 @@ This file contains good test data that pushes the limits of our program.
 ------------------------------------------------------------------------
 
 This integral is ludicrously complicated. If we can show the steps for this, we can likely evaluate any function.
-(3x^2-2x-e^x) \times (9x^3-4x^8-14x^82)
+\left(3x^2-2x-e^x\right) \times \left(9x^3-4x^8-14x^{82}\right)
 
 This function is really big. The definite integral on the range [1,2] should equal about 99.27.
 THERE IS A BUG IN SYMPY THAT STOPS THIS FROM BEING CORRECTLY EVALUATED.

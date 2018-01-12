@@ -58,7 +58,7 @@ def graph(
 	sum_y = []
 
 	fig, ax = plt.subplots(1)
-	for i in np.linspace(lower, upper, num=n):
+	for i in np.linspace(lower, upper + 1, num=n):
 		val = f(i + offset)
 		ax.add_patch(
 			patches.Rectangle(
@@ -66,7 +66,7 @@ def graph(
 				width,
 				val,
 				alpha=0.5,
-				color=pos_color if val > 0 else neg_color
+				color=pos_color if val >= 0 else neg_color
 			)
 		)
 		riemann_sum += width * val

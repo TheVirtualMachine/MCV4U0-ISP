@@ -12,6 +12,28 @@ class HomePage extends Component {
     }
   }
 
+  renderSteps(arr) {
+    if (!arr) 
+      return;
+    
+    return (
+      <ul>
+        {arr.map(val => {
+          if (val instanceof Array) {
+            return this.renderSteps(val);
+          } else {
+            console.log(val);
+            return (
+              <li>
+                {val}
+              </li>
+            );
+          }
+        })}
+      </ul>
+    );
+  }
+
   render() {
     return (
       <div className="HomePage">
@@ -33,13 +55,14 @@ class HomePage extends Component {
               }}></div>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: this.state.note
-                }}>
-              </div>
+                __html: this.state.note
+              }}></div>
             </Card>
           </Col>
         </Row>
-        <Row id="steps"></Row>
+        <Row id="steps">
+          {this.renderSteps(this.state.steps)}
+        </Row>
       </div>
     );
   }

@@ -1,22 +1,26 @@
 import React, {Component} from 'react';
 const {MathJax} = window;
-console.log(window);
 
 class StepsContainer extends Component {
     componentDidUpdate() {
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        MathJax
+            .Hub
+            .Queue(["Typeset", MathJax.Hub]);
     }
 
     renderSteps(arr) {
-        if (!arr) 
+        if (!arr || arr.length === 0) 
             return;
-        return (
+        console.log('arr', arr);
+        let [[name, text], ...substeps] = arr;
+        console.log(name, text, substeps);
+
+        /*return (
             <ul>
                 {arr.map(val => {
-                    if (val instanceof Array) {
+                    if (val instanceof Array && val.length) {
                         return this.renderSteps(val);
                     } else {
-                        console.log(val);
                         return (
                             <li>
                                 {val}
@@ -25,7 +29,7 @@ class StepsContainer extends Component {
                     }
                 })}
             </ul>
-        );
+        );*/
     }
 
     render() {

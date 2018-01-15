@@ -18,8 +18,8 @@
 
 # Convert LaTeX to inline MathJax.
 def inlineMath(latexMath):
-	return "<script type=\"math/tex\">{}</script>".format(latexMath)
+	return "\\({}\\)".format(latexMath)
 
 # Convert LaTeX to display MathJax.
 def displayMath(latexMath):
-	return "<script type=\"math/tex; mode=display\">{}</script>".format(latexMath)
+	return "\\[{}\\]".format(latexMath)

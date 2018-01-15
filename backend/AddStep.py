@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 
 from Step import Step
@@ -44,5 +46,5 @@ class AddStep(Step):
 				first = False
 			else:
 				applyRule += " + \\int {} dx".format(latex(substep.context))
-		
-		return "The {} says that $${}$$.\nThis means that we can integrate each term individually.\nSo, $${}$$".format(self.ruleName, self.ruleFormula, applyRule)
+
+		return "The {} says that: {}\nThis means that we can integrate each term individually.\nSo: {}".format(self.ruleName, displayMath(self.ruleFormula), displayMath(applyRule))

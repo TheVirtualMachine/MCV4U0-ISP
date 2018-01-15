@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 
 from Step import Step
@@ -32,4 +34,7 @@ class ConstantStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return "The {} says that $${}$$.\nHere, $${} = {}$$.\nSo, $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), PLACEHOLDER_CONST, self.constant, self.ruleFormula.format(self.constant))
+		ruleStatement = displayMath(self.ruleFormula.format(PLACEHOLDER_CONST))
+		subStatement = inlineMath("{} = {}".format(PLACEHOLDER_CONST, self.constant))
+		solution = displayMath(self.ruleFormula.format(self.constant))
+		return "The {} says that: {}\nHere, {}.\nSo: {}".format(self.ruleName, ruleStatement, subStatement, solution)

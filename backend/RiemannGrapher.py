@@ -85,6 +85,4 @@ def graph(
 
 	plt.close()
 
-	sumText = "\\({}\\)".format(riemann_sum)
-
-	return (svgText, sumText)
+	return (svgText, riemann_sum)

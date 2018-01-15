@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Navbar, Row, Col, Card} from 'react-materialize';
 import GrapherConfigPanel from './GrapherConfigPanel';
+import StepsContainer from './StepsContainer';
 import './HomePage.css';
 
 class HomePage extends Component {
@@ -10,28 +11,6 @@ class HomePage extends Component {
     this.state = {
       payload: {}
     }
-  }
-
-  renderSteps(arr) {
-    if (!arr) 
-      return;
-    
-    return (
-      <ul>
-        {arr.map(val => {
-          if (val instanceof Array) {
-            return this.renderSteps(val);
-          } else {
-            console.log(val);
-            return (
-              <li>
-                {val}
-              </li>
-            );
-          }
-        })}
-      </ul>
-    );
   }
 
   render() {
@@ -61,7 +40,7 @@ class HomePage extends Component {
           </Col>
         </Row>
         <Row id="steps">
-          {this.renderSteps(this.state.steps)}
+          <StepsContainer steps={this.state.steps}/>
         </Row>
       </div>
     );

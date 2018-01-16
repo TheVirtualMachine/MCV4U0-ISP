@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import integrate
 from sympy import Integral
@@ -38,14 +40,15 @@ class DontKnowStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		integralType = type(integrate(self.sympyFunction, x, manual=True))
+		integral = integrate(self.sympyFunction, x)
+		integralType = type(integral)
 		rule = "I don't know how to show you the steps to integrate $${}$$.".format(self.function)
 		step = ""
 		solution = ""
 		if (integralType is Integral or integralType is NonElementaryIntegral):
 			step = "Since I can't do this, we will just define the integral in terms of itself."
-			solution = "So, $${}$$.".format(RULE_FORMULA.format(self.function))
+			solution = "So: {}".format(displayMath(latex(integral)))
 		else:
 			step = "I do know this integral, I just can't explain it."
-			solution = "Here it is: $${}$$".format(RULE_DEFINED_FORMULA.format(self.function, latex(integrate(self.sympyFunction, x, manual=True))))
+			solution = "Here it is: {}".format(RULE_DEFINED_FORMULA.format(self.function, displayMath(latex(integral))))
 		return "{}\n{}\n{}".format(rule, step, solution)

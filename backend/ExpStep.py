@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import integrate
 from sympy.abc import x
@@ -40,7 +42,11 @@ class ExpStep(Step):
 
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that $${}$$ as long as $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR), self.ruleRestriction.format(PLACEHOLDER_CONST))
-		sub = "Here, $${} = {}$$ and $${} = {}$$.".format(PLACEHOLDER_CONST, self.base, PLACEHOLDER_VAR, self.exponent)
-		solution = "So, $${}$$".format(self.ruleFormula.format(self.base, self.exponent))
+		rule = "The {} says that: {} as long as {}.".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR)), inlineMath(self.ruleRestriction.format(PLACEHOLDER_CONST)))
+
+		baseSub = "{} = {}".format(PLACEHOLDER_CONST, self.base)
+		exponentSub = "{} = {}".format(PLACEHOLDER_VAR, self.exponent)
+		sub = "Here, {} and {}.".format(inlineMath(baseSub), inlineMath(exponentSub))
+
+		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.base, self.exponent)))
 		return "{}\n{}\n{}".format(rule, sub, solution)

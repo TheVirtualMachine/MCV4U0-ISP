@@ -16,11 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+import time
+import json
+
 from Debug import logMessage
 from Debug import DEBUG_MODE
-import time
 
-import json
+from MathJaxProcessor import inlineMath
+from MathJaxProcessor import displayMath
+
 from flask import Flask, request, abort
 from flask_caching import Cache
 
@@ -34,7 +38,7 @@ from RiemannGrapher import graph
 
 from StepProcessor import getStepTree
 
-app = Flask(__name__)  # Create application instance.
+app = Flask(__name__) # Create application instance.
 cache = Cache(app, config={"CACHE_TYPE": "simple"})
 
 # Parse input and do server-side checking.
@@ -155,15 +159,17 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 	results = {}
 	results["note"] = ""
 	if (len(removedVariables) > 0):
-		results["note"] = "Assume that: \\("
+		removedText = ""
 		for var in removedVariables[:-1]:
-			results["note"] += "{},".format(var)
-		results["note"] += "{} = 1\\).".format(removedVariables[-1])
+			removedText += "{},".format(var)
+		removedText += "{} = 1".format(removedVariables[-1])
+		results["note"] = "Assume that: {}.".format(inlineMath(removedText))
 
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	try:
-		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
+		results["graph"], riemannSum = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
+		results["sum"] = displayMath(riemannSum)
 	except Exception:
 		print("501 error")
 		abort(501)
@@ -216,9 +222,9 @@ def doIntegration(f, lower, upper):
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
-	results["function"] = "$${}$$".format(sp.latex(sympyFunction))
-	results["integral"] = "$${}$$".format(sp.latex(indefiniteIntegral))
-	results["sum"] = "$${}$$".format(sp.latex(definiteIntegral))
+	results["function"] = displayMath(sp.latex(sympyFunction))
+	results["integral"] = displayMath(sp.latex(indefiniteIntegral))
+	results["sum"] = displayMath(sp.latex(definiteIntegral))
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

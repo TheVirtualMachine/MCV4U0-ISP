@@ -16,28 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
-from MathJaxProcessor import *
+# Convert LaTeX to inline MathJax.
+def inlineMath(latexMath):
+	return "\\({}\\)".format(latexMath)
 
-from sympy import Symbol
-
-PLACEHOLDER_CONST = "a"
-PLACEHOLDER_VAR = "x"
-PLACEHOLDER_FCN = "f\\left( {} \\right)".format(PLACEHOLDER_VAR)
-PLACEHOLDER_DUMMY = "u"
-DUMMY_SYMBOL = Symbol(PLACEHOLDER_DUMMY)
-
-class Step:
-
-	# Initialize the step.
-	def __init__(self, step, ruleName : str, ruleFormula : str):
-		self.step = step
-		self.ruleName = ruleName
-		self.ruleFormula = ruleFormula
-	
-	# Get the text for applying the rule.
-	def getText(self) -> str:
-		return ("The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_VAR))))
-	
-	# Get the data to be returned in JSON.
-	def getData(self) -> tuple:
-		return (self.ruleName, self.getText())
+# Convert LaTeX to display MathJax.
+def displayMath(latexMath):
+	return "\\[{}\\]".format(latexMath)

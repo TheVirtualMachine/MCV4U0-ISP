@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 
 from Step import Step
@@ -24,7 +26,6 @@ from Step import PLACEHOLDER_VAR
 
 RULE_NAME = "constant times rule"
 RULE_FORMULA = "\\int {0}{1} \\, d{2} = {0} \\int {1} \\, d{2}"
-
 
 class ConstantTimesStep(Step):
 
@@ -37,7 +38,9 @@ class ConstantTimesStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR))
-		sub = "Here, $${} = {}$$ and $${} = {}$$".format(PLACEHOLDER_CONST, self.constant, PLACEHOLDER_FCN, self.other)
-		solution = "So, $${}$$".format(self.ruleFormula.format(self.constant, self.other, self.symbol))
+		rule = "The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR)))
+		sub1 = inlineMath("{} = {}".format(PLACEHOLDER_CONST, self.constant))
+		sub2 = inlineMath("{} = {}".format(PLACEHOLDER_FCN, self.other))
+		sub = "Here, {} and {}.".format(sub1, sub2)
+		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.constant, self.other, self.symbol)))
 		return "{}\n{}\n{}".format(rule, sub, solution)

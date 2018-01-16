@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import Integral
 
@@ -35,6 +37,6 @@ class RewriteStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
-		solution = "We will write $${}$$ as $${}$$ and then integrate this.".format(self.original, self.rewritten)
+		solution = "We will write {} as {} and then integrate this.".format(displayMath(self.original), displayMath(self.rewritten))
 
 		return "{}\n{}".format(rule, solution)

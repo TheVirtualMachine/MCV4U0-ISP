@@ -38,6 +38,5 @@ class Step:
 	def getText(self) -> str:
 		return ("The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_VAR))))
 	
-	# Get the data to be returned in JSON.
-	def getData(self) -> tuple:
-		return (self.ruleName, self.getText())
+	def getName(self) -> str:
+		return self.ruleName

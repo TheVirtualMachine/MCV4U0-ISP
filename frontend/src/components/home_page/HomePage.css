@@ -9,6 +9,12 @@
 
 #calculators {
     margin-top: 20px;
+    display: flex;
+}
+
+#calculators .col {
+    display: flex;
+    flex: 1;
 }
 
 #mathquill .mq-focused {
@@ -76,4 +82,14 @@ input::-moz-focus-outer {
     outline: 0 !important;
     border: 0 !important;
     outline-style: none !important;
+}
+
+@media only screen and (max-width: 1095px){
+    #calculators{
+        flex-direction: column;
+        justify-content: center;
+    }
+    .col{
+        width: 100%;
+    }
 }

@@ -41,7 +41,7 @@ class PowerStep(Step):
 
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), self.ruleRestriction.format(PLACEHOLDER_CONST))
+		rule = "The {} says that: {} as long as {}.".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST)), inlineMath(self.ruleRestriction.format(PLACEHOLDER_CONST)))
 
 		exponentSub = "{} = {}".format(PLACEHOLDER_CONST, self.exponent)
 		sub = "Here, {}.".format(inlineMath(exponentSub))

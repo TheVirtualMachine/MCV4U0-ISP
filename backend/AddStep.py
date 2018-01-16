@@ -47,4 +47,4 @@ class AddStep(Step):
 			else:
 				applyRule += " + \\int {} dx".format(latex(substep.context))
 
-		return "The {} says that: {}\nThis means that we can integrate each term individually.\nSo: {}".format(self.ruleName, displayMath(self.ruleFormula), displayMath(applyRule))
+		return "The {} says that: {}This means that we can integrate each term individually. So: {}".format(self.ruleName, displayMath(self.ruleFormula), displayMath(applyRule))

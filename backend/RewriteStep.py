@@ -39,4 +39,4 @@ class RewriteStep(Step):
 		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
 		solution = "We will write {} as {} and then integrate this.".format(displayMath(self.original), displayMath(self.rewritten))
 
-		return "{}\n{}".format(rule, solution)
+		return "{}{}".format(rule, solution)

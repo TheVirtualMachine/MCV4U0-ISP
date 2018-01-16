@@ -47,4 +47,4 @@ class PowerStep(Step):
 		sub = "Here, {}.".format(inlineMath(exponentSub))
 
 		solution = "So: {}".format(displayMath(self.ruleFormulaFull.format(self.exponent, latex(integrate(self.step.context, x)))))
-		return "{}\n{}\n{}".format(rule, sub, solution)
+		return "{}{}{}".format(rule, sub, solution)

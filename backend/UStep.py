@@ -55,4 +55,4 @@ class UStep(Step):
 
 		solution = "So: {}".format(displayMath(formula))
 
-		return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)
+		return "{}{}{}{}".format(rule, uSub, dxSub, solution)

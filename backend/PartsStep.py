@@ -61,4 +61,4 @@ class PartsStep(Step):
 		dvStatement = "Next, we find $${}$$ as so: $${}$$".format(PARTS_VAR_2, dvExpression)
 		
 
-		return "{}\n{}\n{}\n{}".format(rule, letStatement, duStatement, dvStatement)
+		return "{}{}{}{}".format(rule, letStatement, duStatement, dvStatement)

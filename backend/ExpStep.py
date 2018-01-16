@@ -49,4 +49,4 @@ class ExpStep(Step):
 		sub = "Here, {} and {}.".format(inlineMath(baseSub), inlineMath(exponentSub))
 
 		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.base, self.exponent)))
-		return "{}\n{}\n{}".format(rule, sub, solution)
+		return "{}{}{}".format(rule, sub, solution)

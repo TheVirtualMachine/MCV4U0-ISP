@@ -51,4 +51,4 @@ class DontKnowStep(Step):
 		else:
 			step = "I do know this integral, I just can't explain it."
 			solution = "Here it is: {}".format(RULE_DEFINED_FORMULA.format(self.function, displayMath(latex(integral))))
-		return "{}\n{}\n{}".format(rule, step, solution)
+		return "{}{}{}".format(rule, step, solution)

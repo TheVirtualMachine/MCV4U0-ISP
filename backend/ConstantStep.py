@@ -37,4 +37,4 @@ class ConstantStep(Step):
 		ruleStatement = displayMath(self.ruleFormula.format(PLACEHOLDER_CONST))
 		subStatement = inlineMath("{} = {}".format(PLACEHOLDER_CONST, self.constant))
 		solution = displayMath(self.ruleFormula.format(self.constant))
-		return "The {} says that: {}\nHere, {}.\nSo: {}".format(self.ruleName, ruleStatement, subStatement, solution)
+		return "The {} says that: {}Here, {}. So: {}".format(self.ruleName, ruleStatement, subStatement, solution)

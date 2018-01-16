@@ -44,4 +44,4 @@ class ReciprocalStep(Step):
 		subStatement = "Here, {}.".format(inlineMath(sub))
 		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.symbol)))
 
-		return "{}\n{}\n{}".format(rule, subStatement, solution)
+		return "{}{}{}".format(rule, subStatement, solution)

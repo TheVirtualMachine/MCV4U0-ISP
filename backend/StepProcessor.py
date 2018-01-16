@@ -35,7 +35,7 @@ from PartsStep import PartsStep
 # Return a list of steps.
 def getStepTree(step):
 	stepDict = {}
-	logMessage("Getting step tree of: {}.".format(step))
+	stepDict["substeps"] = []
 	if (type(step) is AddRule):
 		logMessage("Appending add rule.")
 		stepObj = AddStep(step)
@@ -48,13 +48,11 @@ def getStepTree(step):
 		stepObj = ConstantStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = []
 	elif (type(step) is PowerRule):
 		logMessage("Appending power rule.")
 		stepObj = PowerStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = []
 	elif (type(step) is ConstantTimesRule):
 		logMessage("Appending constant times rule.")
 		stepObj = ConstantTimesStep(step)
@@ -66,19 +64,16 @@ def getStepTree(step):
 		stepObj = TrigStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = []
 	elif (type(step) is ExpRule):
 		logMessage("Appending exp rule.")
 		stepObj = ExpStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = []
 	elif (type(step) is ReciprocalRule):
 		logMessage("Appending reciprocal rule.")
 		stepObj = ReciprocalStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = []
 	elif (type(step) is URule):
 		logMessage("Appending u rule.")
 		stepObj = UStep(step)
@@ -105,5 +100,4 @@ def getStepTree(step):
 		stepDict["text"] = stepObj.getText()
 		if (type(step) is not DontKnowRule):
 			logMessage("USING DON'T KNOW RULE WHEN ACTUAL RULE IS {}!".format(type(step)))
-		stepDict["substeps"] = []
 	return stepDict

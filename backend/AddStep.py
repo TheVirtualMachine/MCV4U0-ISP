@@ -40,7 +40,6 @@ class AddStep(Step):
 
 		first = True
 		for substep in self.substeps:
-			print("Substep is: " + str(substep))
 			if first:
 				applyRule += "\\int {} dx".format(latex(substep.context))
 				first = False

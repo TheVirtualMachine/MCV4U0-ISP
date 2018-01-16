@@ -168,8 +168,7 @@ def doGraphing(f, n, handed, lower, upper, plotSum, posCol, negCol):
 	# Graph the image.
 	lambdaFunction = sp.lambdify(x, stupidFunction)
 	try:
-		results["graph"], riemannSum = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
-		results["sum"] = displayMath(riemannSum)
+		results["graph"], results["sum"] = graph(lambdaFunction, n=n, handed=handed, lower=float(lower), upper=float(upper), plotSum=plotSum, pos_color=posCol, neg_color=negCol)
 	except Exception:
 		print("501 error")
 		abort(501)

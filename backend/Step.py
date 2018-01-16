@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import Symbol
 
 PLACEHOLDER_CONST = "a"
@@ -34,7 +36,7 @@ class Step:
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		return ("The {} says that {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR)))
+		return ("The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_VAR))))
 	
 	# Get the data to be returned in JSON.
 	def getData(self) -> tuple:

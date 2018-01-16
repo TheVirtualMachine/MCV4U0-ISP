@@ -16,15 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+import time
+import json
+
 from Debug import logMessage
 from Debug import DEBUG_MODE
 
 from MathJaxProcessor import inlineMath
 from MathJaxProcessor import displayMath
 
-import time
-
-import json
 from flask import Flask, request, abort
 from flask_caching import Cache
 
@@ -38,7 +38,7 @@ from RiemannGrapher import graph
 
 from StepProcessor import getStepTree
 
-app = Flask(__name__)  # Create application instance.
+app = Flask(__name__) # Create application instance.
 cache = Cache(app, config={"CACHE_TYPE": "simple"})
 
 # Parse input and do server-side checking.

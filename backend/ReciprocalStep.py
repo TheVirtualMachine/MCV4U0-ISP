@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 
 from Step import Step
@@ -33,12 +35,13 @@ class ReciprocalStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_VAR))
+		rule = "The {} says that: {}.".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_VAR)))
 		
 		if (self.symbol == PLACEHOLDER_VAR):
 			return rule
 
-		solution = "So, $${}$$.".format(self.ruleFormula.format(self.symbol))
-		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_VAR, self.symbol)
+		sub = "{} = {}"
+		subStatement = "Here, {}.".format(inlineMath(sub))
+		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.symbol)))
 
-		return "{}\n{}\n{}".format(rule, sub, solution)
+		return "{}\n{}\n{}".format(rule, subStatement, solution)

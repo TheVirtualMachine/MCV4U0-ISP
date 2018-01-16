@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import Integral
 
@@ -43,12 +45,14 @@ class UStep(Step):
 	def getText(self) -> str:
 		rule = "The {} says that {}.".format(self.ruleName, self.ruleFormula)
 		
-		uSub = "Let $${}$$.".format(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol))
-		dxSub = "Then, $${}$$.".format(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol))
+		uSub = "Let {}.".format(inlineMath(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol)))
+		dxSub = "Then, {}.".format(inlineMath(SUB_FORMULA_2.format(PLACEHOLDER_DUMMY, self.constant, self.symbol)))
 
 		integralFormula = latex(Integral(self.step.context))
 		substitutedFormula = latex(Integral(self.step.context.subs(self.step.u_func, PLACEHOLDER_DUMMY), DUMMY_SYMBOL))
 
-		solution = "So, $${} = {}$$.".format(integralFormula, substitutedFormula)
+		formula = "{} = {}".format(integralFormula, substitutedFormula)
+
+		solution = "So: {}".format(displayMath(formula))
 
 		return "{}\n{}\n{}\n{}".format(rule, uSub, dxSub, solution)

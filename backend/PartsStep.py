@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import diff
 from sympy import Integral
@@ -47,8 +49,8 @@ class PartsStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that $${}$$.".format(self.ruleName, self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2))
-		letStatement = "Let $${}$$ and let $${}$$.".format(PARTS_FORMULA_1.format(self.u), PARTS_FORMULA_2.format(self.dv))
+		rule = "The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2)))
+		letStatement = "Let {} and let {}.".format(inlineMath(PARTS_FORMULA_1.format(self.u)), inlineMath(PARTS_FORMULA_2.format(self.dv)))
 
 		duExpression = "d{} = {}".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
 		duStatement = "Differentiate $${}$$ to find that $${}$$.".format(PARTS_VAR_1, duExpression)

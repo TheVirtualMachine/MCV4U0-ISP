@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
+from MathJaxProcessor import *
+
 from sympy import latex
 from sympy import integrate
 from sympy.abc import x
@@ -40,6 +42,9 @@ class PowerStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that {} as long as {}.".format(self.ruleName, self.ruleFormula.format(PLACEHOLDER_CONST), self.ruleRestriction.format(PLACEHOLDER_CONST))
-		sub = "Here, $${} = {}$$.".format(PLACEHOLDER_CONST, self.exponent)
-		solution = "So, $${}$$".format(self.ruleFormulaFull.format(self.exponent, latex(integrate(self.step.context, x)) ))
+
+		exponentSub = "{} = {}".format(PLACEHOLDER_CONST, self.exponent)
+		sub = "Here, {}.".format(inlineMath(exponentSub))
+
+		solution = "So: {}".format(displayMath(self.ruleFormulaFull.format(self.exponent, latex(integrate(self.step.context, x)))))
 		return "{}\n{}\n{}".format(rule, sub, solution)

@@ -2,6 +2,19 @@ import React, {Component} from 'react';
 const {MathJax} = window;
 
 class StepsContainer extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            steps: []
+        };
+    }
+
+    componentWillReceiveProps({steps}) {
+        this.setState({
+            steps: this.renderSteps(steps)
+        });
+    }
+
     componentDidUpdate() {
         MathJax
             .Hub
@@ -11,9 +24,28 @@ class StepsContainer extends Component {
     renderSteps(arr) {
         if (!arr || arr.length === 0) 
             return;
-        console.log('arr', arr);
-        let [[name, text], ...substeps] = arr;
-        console.log(name, text, substeps);
+        
+        let [rule,
+            ...substeps] = arr;
+        while (rule[0]instanceof Array) {
+            rule = rule[0];
+        }
+        let [name,
+            text] = rule;
+
+        console.log('name', name, 'text', text, 'substeps', substeps.length);
+
+        if (substeps.length > 1) {
+            console.log(substeps.map(x => x[0]))
+        }
+
+        return (
+            <div className="step">
+                <h1>{name}</h1>
+                <p className="rule-text">{text}</p>
+                {substeps.map(this.renderSteps.bind(this))}
+            </div>
+        );
 
         /*return (
             <ul>
@@ -33,9 +65,10 @@ class StepsContainer extends Component {
     }
 
     render() {
+        console.log('steps:', JSON.stringify(this.props.steps || []));
         return (
             <div>
-                {this.renderSteps(this.props.steps)}
+                {this.state.steps}
             </div>
         );
     }

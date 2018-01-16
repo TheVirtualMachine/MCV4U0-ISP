@@ -107,10 +107,10 @@ class GrapherConfigPanel extends Component {
             }
             this.setState(upper
                 ? {
-                    upper: Number.parseInt(val, 10)
+                    upper: parseFloat(val, 10)
                 }
                 : {
-                    lower: Number.parseInt(val, 10)
+                    lower: parseFloat(val, 10)
                 });
         };
     }
@@ -157,7 +157,6 @@ class GrapherConfigPanel extends Component {
             negColor
         } = this.state;
         const request = `/graph?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
-        console.log(request)
         fetch(request)
             .then(result => result.json())
             .then(result => this.props.updatePageState({...result}))
@@ -177,7 +176,6 @@ class GrapherConfigPanel extends Component {
             //TODO: graph/allow graph
             let {equation, lower, upper} = this.state;
             const request = `/integrate?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}`;
-            console.log(request);
             fetch(request)
                 .then(result => result.json())
                 .then(result => this.props.updatePageState({

@@ -43,7 +43,6 @@ class UStep(Step):
 	
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		print(self.constant)
 		rule = "The {} says that {}. ".format(self.ruleName, self.ruleFormula)
 		
 		uSub = "Let {}. ".format(inlineMath(SUB_FORMULA_1.format(PLACEHOLDER_DUMMY, self.inverseConstant, self.symbol)))

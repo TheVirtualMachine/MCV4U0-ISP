@@ -27,7 +27,7 @@ from Step import PLACEHOLDER_CONST
 
 RULE_NAME = "power rule"
 RULE_FORMULA = "\\int x^{0} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }}"
-RULE_FORMULA_FULL = "\\int x^{0} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }} = {1}"
+RULE_FORMULA_FULL = "\\int x^{{ {0} }} \\, dx = \\frac{{ x^{{ {0}+ 1 }} }}{{ {0}+1 }} = {1}"
 RULE_RESTRICTION = "{0} \\neq -1"
 
 class PowerStep(Step):

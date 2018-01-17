@@ -41,6 +41,6 @@ class ConstantTimesStep(Step):
 		rule = "The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_FCN, PLACEHOLDER_VAR)))
 		sub1 = inlineMath("{} = {}".format(PLACEHOLDER_CONST, self.constant))
 		sub2 = inlineMath("{} = {}".format(PLACEHOLDER_FCN, self.other))
-		sub = "Here, {} and {}.".format(sub1, sub2)
+		sub = "Here, {} and {}. ".format(sub1, sub2)
 		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.constant, self.other, self.symbol)))
 		return "{}{}{}".format(rule, sub, solution)

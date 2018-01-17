@@ -223,6 +223,7 @@ def doIntegration(f, lower, upper):
 	results["function"] = sp.latex(sympyFunction)
 	results["integral"] = sp.latex(indefiniteIntegral)
 	results["definiteIntegral"] = sp.latex(definiteIntegral)
+	results["approxDefiniteIntegral"] = sp.latex(definiteIntegral.evalf())
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

@@ -58,7 +58,7 @@ def getStepTree(step):
 		stepObj = ConstantTimesStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = getStepTree(step.substep)
+		stepDict["substeps"].append(getStepTree(step.substep))
 	elif (type(step) is TrigRule):
 		logMessage("Appending trig rule.")
 		stepObj = TrigStep(step)
@@ -79,13 +79,13 @@ def getStepTree(step):
 		stepObj = UStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = getStepTree(step.substep)
+		stepDict["substeps"].append(getStepTree(step.substep))
 	elif (type(step) is RewriteRule):
 		logMessage("Appending rewrite rule.")
 		stepObj = RewriteStep(step)
 		stepDict["name"] = stepObj.getName()
 		stepDict["text"] = stepObj.getText()
-		stepDict["substeps"] = getStepTree(step.substep)
+		stepDict["substeps"].append(getStepTree(step.substep))
 	elif (type(step) is PartsRule):
 		logMessage("Appending parts rule.")
 		stepObj = PartsStep(step)

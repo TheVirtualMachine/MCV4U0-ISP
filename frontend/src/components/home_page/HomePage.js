@@ -7,7 +7,7 @@ import './HomePage.css';
 const IntegralDisplay = ({integral}) => {
   return (
     <div>
-      <span className="flow-text">Indefinite Integral:&nbsp;</span>
+      <span className="flow-text">Integral:&nbsp;</span>
       <span>{`\\(\\int f(x) dx = ${integral.slice(2, -2)} + C \\)`}</span>
     </div>
   );
@@ -17,7 +17,7 @@ const RiemannSumDisplay = ({sum}) => {
   return (
     <div>
       <span className="flow-text">Riemann Sum:&nbsp;</span>
-      <span>{`\\( \\sum f(x) \\Delta x = ${sum.slice(2,-2)} \\)`}</span>
+      <span>\( \sum f(x) \Delta x = \) {sum}</span>
     </div>
   );
 }
@@ -27,7 +27,12 @@ class HomePage extends Component {
     super(props);
     this.state = {
       integral: '$$\\frac{x^2}{2}$$',
-      sum: '\\(3520.0\\)'
+      sum: 3520,
+      steps: {
+        name: '',
+        text: '',
+        substeps: []
+      }
     }
   }
 

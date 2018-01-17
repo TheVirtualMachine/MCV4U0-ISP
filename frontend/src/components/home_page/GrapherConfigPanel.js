@@ -260,7 +260,6 @@ class GrapherConfigPanel extends Component {
                             label='Graph Running Area'/>
                     </Col>
                     <Col s={12} l={4}>
-                        <label>Colours</label>
                         <Collapsible>
                             <ColorPickerItem
                                 header='Positive'

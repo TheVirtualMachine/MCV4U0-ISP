@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Navbar, Row, Col, Card} from 'react-materialize';
+import {Navbar, Row, Col, Card, ProgressBar} from 'react-materialize';
 import GrapherConfigPanel from './GrapherConfigPanel';
 import StepsContainer from './StepsContainer';
 import './HomePage.css';
@@ -47,6 +47,7 @@ class HomePage extends Component {
     super(props);
     this.state = {
       integral: '$$\\frac{x^2}{2}$$',
+      loading: false,
       sum: 3520,
       steps: {
         name: '',
@@ -54,6 +55,10 @@ class HomePage extends Component {
         substeps: []
       }
     }
+  }
+
+  get showStuff(){
+    return this.state.function && !this.state.loading;
   }
 
   componentWillUpdate() {
@@ -70,7 +75,7 @@ class HomePage extends Component {
         <Row id="calculators">
           <Col s={12} m={6}>
             <Card
-              actions={[this.state.function && (<IntegralDisplay fcn={this.state.function} {...this.state}/>)]}>
+              actions={[this.showStuff && (<IntegralDisplay fcn={this.state.function} {...this.state}/>)]}>
               <GrapherConfigPanel
                 updatePageState={this
                 .setState
@@ -82,11 +87,13 @@ class HomePage extends Component {
               style={{
               minWidth: '100%'
             }}
-              actions={[this.state.function && (<RiemannSumDisplay fcn={this.state.function} {...this.state}/>)]}>
-              <div
-                dangerouslySetInnerHTML={{
-                __html: this.state.graph
-              }}></div>
+              actions={[this.showStuff && (<RiemannSumDisplay fcn={this.state.function} {...this.state}/>)]}>
+              {this.state.loading
+                ? <ProgressBar/>
+                : <div
+                  dangerouslySetInnerHTML={{
+                  __html: this.state.graph
+                }}></div>}
               <div
                 dangerouslySetInnerHTML={{
                 __html: this.state.note
@@ -97,7 +104,7 @@ class HomePage extends Component {
         <Row id="steps">
           <h4>Steps</h4>
           <Col s={12} m={6}>
-            {this.state.function && <StepsContainer steps={this.state.steps}/>}
+            {this.showStuff && <StepsContainer steps={this.state.steps}/>}
           </Col>
         </Row>
       </div>

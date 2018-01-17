@@ -43,11 +43,11 @@
     justify-content: center;
 }
 
-.collapsible * {
+#config-panel .collapsible * {
     box-shadow: none !important;
 }
 
-.collapsible-body {
+#config-panel .collapsible-body {
     padding: 0;
 }
 

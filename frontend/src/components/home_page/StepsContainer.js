@@ -44,31 +44,15 @@ class StepsContainer extends Component {
         return (
             <CollapsibleItem header={name} icon={ICONS[name]}>
                 <p className="rule-text">{text}</p>
-                {substeps.map(substep => {
+                {substeps.map((substep, i) => {
                     return (
-                        <Collapsible>
+                        <Collapsible key={`rule-${i}`}>
                             {this.renderSteps(substep)}
                         </Collapsible>
                     );
                 })}
             </CollapsibleItem>
         );
-
-        /*return (
-            <ul>
-                {arr.map(val => {
-                    if (val instanceof Array && val.length) {
-                        return this.renderSteps(val);
-                    } else {
-                        return (
-                            <li>
-                                {val}
-                            </li>
-                        );
-                    }
-                })}
-            </ul>
-        );*/
     }
 
     render() {

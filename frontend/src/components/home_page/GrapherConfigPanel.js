@@ -66,6 +66,11 @@ class GrapherConfigPanel extends Component {
         }
     }
 
+    componentDidMount() {
+        this.submit();
+        this.updateGraph();
+    }
+
     handleEquationChange(latex) {
         //TODO: validate
         this.setState({equation: latex});
@@ -178,13 +183,20 @@ class GrapherConfigPanel extends Component {
             //TODO: reject
             alert('The following fields are invalid:\n', invalid_field_names.join(' '))
         } else {
+
+            this
+                .props
+                .updatePageState({loading: true})
+
             //TODO: graph/allow graph
             let {equation, lower, upper} = this.state;
             const request = `/integrate?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}`;
+
             fetch(request)
                 .then(result => result.json())
                 .then(result => this.props.updatePageState({
-                    ...result
+                    ...result,
+                    loading: false
                 }))
                 .then(() => this.updateGraph())
                 .catch(error => alert(error)); //TODO: errortrap

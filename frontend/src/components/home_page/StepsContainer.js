@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Collapsible, CollapsibleItem} from 'react-materialize';
 const {MathJax} = window;
 
 class StepsContainer extends Component {
@@ -21,30 +22,20 @@ class StepsContainer extends Component {
             .Queue(["Typeset", MathJax.Hub]);
     }
 
-    renderSteps(arr) {
-        if (!arr || arr.length === 0) 
-            return;
-        
-        let [rule,
-            ...substeps] = arr;
-        while (rule[0]instanceof Array) {
-            rule = rule[0];
-        }
-        let [name,
-            text] = rule;
-
-        console.log('name', name, 'text', text, 'substeps', substeps.length);
-
-        if (substeps.length > 1) {
-            console.log(substeps.map(x => x[0]))
-        }
-
+    renderSteps(step) {
+        console.log('step:',step)
+        let {name, text, substeps} = step;
         return (
-            <div className="step">
-                <h1>{name}</h1>
+            <CollapsibleItem header={name}>
                 <p className="rule-text">{text}</p>
-                {substeps.map(this.renderSteps.bind(this))}
-            </div>
+                {substeps.map(substep => {
+                    return (
+                        <Collapsible>
+                            {this.renderSteps(substep)}
+                        </Collapsible>
+                    );
+                })}
+            </CollapsibleItem>
         );
 
         /*return (
@@ -65,11 +56,10 @@ class StepsContainer extends Component {
     }
 
     render() {
-        console.log('steps:', JSON.stringify(this.props.steps || []));
         return (
-            <div>
+            <Collapsible>
                 {this.state.steps}
-            </div>
+            </Collapsible>
         );
     }
 }

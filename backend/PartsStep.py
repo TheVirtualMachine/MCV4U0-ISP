@@ -50,15 +50,15 @@ class PartsStep(Step):
 	# Get the text for applying the rule.
 	def getText(self) -> str:
 		rule = "The {} says that: {}".format(self.ruleName, displayMath(self.ruleFormula.format(PARTS_VAR_1, PARTS_VAR_2)))
-		letStatement = "Let {} and let {}.".format(inlineMath(PARTS_FORMULA_1.format(self.u)), inlineMath(PARTS_FORMULA_2.format(self.dv)))
+		letStatement = "Let {} and let {}. ".format(inlineMath(PARTS_FORMULA_1.format(self.u)), inlineMath(PARTS_FORMULA_2.format(self.dv)))
 
 		duExpression = "d{} = {}".format(PARTS_VAR_1, latex(diff(self.step.u, self.step.symbol)))
-		duStatement = "Differentiate $${}$$ to find that $${}$$.".format(PARTS_VAR_1, duExpression)
+		duStatement = "Differentiate {} to find that {}. ".format(inlineMath(PARTS_VAR_1), inlineMath(duExpression))
 
 		dvIntegral = Integral(self.step.dv, self.step.symbol)
 
 		dvExpression = "{0} = \\int d{0} = {1}".format(PARTS_VAR_2, latex(dvIntegral))
-		dvStatement = "Next, we find $${}$$ as so: $${}$$".format(PARTS_VAR_2, dvExpression)
+		dvStatement = "Next, we find {} as so: {}".format(inlineMath(PARTS_VAR_2), displayMath(dvExpression))
 		
 
 		return "{}{}{}{}".format(rule, letStatement, duStatement, dvStatement)

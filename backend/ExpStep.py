@@ -42,11 +42,17 @@ class ExpStep(Step):
 
 	# Get the text for applying the rule.
 	def getText(self) -> str:
-		rule = "The {} says that: {} as long as {}.".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR)), inlineMath(self.ruleRestriction.format(PLACEHOLDER_CONST)))
+		if (self.base == "e"):
+			rule = "The integral of {0} is {0}. ".format(inlineMath("e^x"))
+			integral = "\\int e^{}".format(self.exponent)
+			solution = "So: {}".format(displayMath("{} = e^{}".format(integral, self.exponent)))
+			return "{}{}".format(rule, solution)
+		else:
+			rule = "The {} says that: {} as long as {}. ".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST, PLACEHOLDER_VAR)), inlineMath(self.ruleRestriction.format(PLACEHOLDER_CONST)))
 
-		baseSub = "{} = {}".format(PLACEHOLDER_CONST, self.base)
-		exponentSub = "{} = {}".format(PLACEHOLDER_VAR, self.exponent)
-		sub = "Here, {} and {}.".format(inlineMath(baseSub), inlineMath(exponentSub))
+			baseSub = "{} = {}".format(PLACEHOLDER_CONST, self.base)
+			exponentSub = "{} = {}".format(PLACEHOLDER_VAR, self.exponent)
+			sub = "Here, {} and {}. ".format(inlineMath(baseSub), inlineMath(exponentSub))
 
-		solution = "So: {}".format(displayMath(self.ruleFormula.format(self.base, self.exponent)))
+			solution = "So: {}".format(displayMath(self.ruleFormula.format(self.base, self.exponent)))
 		return "{}{}{}".format(rule, sub, solution)

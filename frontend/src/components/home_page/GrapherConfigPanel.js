@@ -159,7 +159,12 @@ class GrapherConfigPanel extends Component {
         const request = `/graph?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
         fetch(request)
             .then(result => result.json())
-            .then(result => this.props.updatePageState({...result}))
+            .then(result => this.props.updatePageState({
+                ...result,
+                lower: this.state.lower,
+                upper: this.state.upper,
+                samples: this.state.samples
+            }))
             .catch(error => console.log(error));
     }
 

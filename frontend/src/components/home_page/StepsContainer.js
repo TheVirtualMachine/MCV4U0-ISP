@@ -5,11 +5,13 @@ const {MathJax} = window;
 const ICONS = {
     'Constant Times Rule': 'highlight_off',
     'Power Rule': 'filter_none',
+    'Exponent Rule': 'explicit',
     'Constant Rule': 'copyright',
     'Trig Rule': 'signal_cellular_null',
     'U Rule': 'format_underlined',
     'Add Rule': 'add',
-    'Don\'t Know Rule': 'help_outline'
+    'Don\'t Know Rule': 'help_outline',
+    'Parts Rule': 'donut_large'
 }
 
 String.prototype.capitalize = function () {
@@ -37,7 +39,6 @@ class StepsContainer extends Component {
     }
 
     renderSteps(step) {
-        console.log('step:', step)
         let {name, text, substeps} = step;
         name = name.capitalize();
         return (

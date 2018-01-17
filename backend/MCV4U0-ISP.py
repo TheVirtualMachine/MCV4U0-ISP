@@ -23,7 +23,6 @@ from Debug import logMessage
 from Debug import DEBUG_MODE
 
 from MathJaxProcessor import inlineMath
-from MathJaxProcessor import displayMath
 
 from flask import Flask, request, abort
 from flask_caching import Cache
@@ -221,9 +220,9 @@ def doIntegration(f, lower, upper):
 
 	# Format the results into a dictionary which later is converted to JSON.
 	results = {}
-	results["function"] = displayMath(sp.latex(sympyFunction))
-	results["integral"] = displayMath(sp.latex(indefiniteIntegral))
-	results["sum"] = displayMath(sp.latex(definiteIntegral))
+	results["function"] = sp.latex(sympyFunction)
+	results["integral"] = sp.latex(indefiniteIntegral)
+	results["sum"] = sp.latex(definiteIntegral)
 	results["steps"] = getStepTree(integral_steps(sympyFunction, x))
 
 	return json.JSONEncoder().encode(results) # Return the results.

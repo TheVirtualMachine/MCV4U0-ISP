@@ -44,7 +44,7 @@ class PowerStep(Step):
 		rule = "The {} says that: {} as long as {}.".format(self.ruleName, displayMath(self.ruleFormula.format(PLACEHOLDER_CONST)), inlineMath(self.ruleRestriction.format(PLACEHOLDER_CONST)))
 
 		exponentSub = "{} = {}".format(PLACEHOLDER_CONST, self.exponent)
-		sub = "Here, {}.".format(inlineMath(exponentSub))
+		sub = "Here, {}. ".format(inlineMath(exponentSub))
 
 		solution = "So: {}".format(displayMath(self.ruleFormulaFull.format(self.exponent, latex(integrate(self.step.context, x)))))
 		return "{}{}{}".format(rule, sub, solution)

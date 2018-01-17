@@ -42,13 +42,13 @@ class DontKnowStep(Step):
 	def getText(self) -> str:
 		integral = integrate(self.sympyFunction, x)
 		integralType = type(integral)
-		rule = "I don't know how to show you the steps to integrate $${}$$.".format(self.function)
+		rule = "I don't know how to show you the steps to integrate {}. ".format(inlineMath(self.function))
 		step = ""
 		solution = ""
 		if (integralType is Integral or integralType is NonElementaryIntegral):
-			step = "Since I can't do this, we will just define the integral in terms of itself."
+			step = "Since I can't do this, we will just define the integral in terms of itself. "
 			solution = "So: {}".format(displayMath(latex(integral)))
 		else:
-			step = "I do know this integral, I just can't explain it."
-			solution = "Here it is: {}".format(RULE_DEFINED_FORMULA.format(self.function, displayMath(latex(integral))))
+			step = "I do know this integral, I just can't explain it. "
+			solution = "Here it is: {}".format(displayMath(RULE_DEFINED_FORMULA.format(self.function, latex(integral))))
 		return "{}{}{}".format(rule, step, solution)

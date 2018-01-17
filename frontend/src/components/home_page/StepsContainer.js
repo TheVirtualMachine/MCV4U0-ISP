@@ -2,6 +2,20 @@ import React, {Component} from 'react';
 import {Collapsible, CollapsibleItem} from 'react-materialize';
 const {MathJax} = window;
 
+const ICONS = {
+    'Constant Times Rule': 'highlight_off',
+    'Power Rule': 'filter_none',
+    'Constant Rule': 'copyright',
+    'Trig Rule': 'signal_cellular_null',
+    'U Rule': 'format_underlined',
+    'Add Rule': 'add',
+    'Don\'t Know Rule': 'help_outline'
+}
+
+String.prototype.capitalize = function () {
+    return this.replace(/(^|\s)\S/g, l => l.toUpperCase())
+}
+
 class StepsContainer extends Component {
     constructor(props) {
         super(props);
@@ -23,10 +37,11 @@ class StepsContainer extends Component {
     }
 
     renderSteps(step) {
-        console.log('step:',step)
+        console.log('step:', step)
         let {name, text, substeps} = step;
+        name = name.capitalize();
         return (
-            <CollapsibleItem header={name}>
+            <CollapsibleItem header={name} icon={ICONS[name]}>
                 <p className="rule-text">{text}</p>
                 {substeps.map(substep => {
                     return (

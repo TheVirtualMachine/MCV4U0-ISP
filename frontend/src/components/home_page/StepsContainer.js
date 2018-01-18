@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Collapsible, CollapsibleItem, Modal, Button} from 'react-materialize';
+import AddRule from './derivations/AddRule';
+
 const {MathJax} = window;
 
 const capitalize = word => word.replace(/(^|\s)\S/g, l => l.toUpperCase())
@@ -9,8 +11,7 @@ const RULES = {
         icon: 'highlight_off'
     },
     'Power Rule': {
-        icon: 'filter_none',
-        proof: 'Toast!'
+        icon: 'filter_none'
     },
     'Exponent Rule': {
         icon: 'explicit'
@@ -25,7 +26,8 @@ const RULES = {
         icon: 'format_underlined'
     },
     'Add Rule': {
-        icon: 'add'
+        icon: 'add',
+        derivation: AddRule
     },
     'Don\'t Know Rule': {
         icon: 'help_outline'
@@ -65,20 +67,20 @@ class StepsContainer extends Component {
         let {name, text, substeps} = step;
 
         name = capitalize(name);
-        let {icon, proof} = RULES[name];
+        let {icon, derivation} = RULES[name];
 
         return (
             <CollapsibleItem header={name} icon={icon}>
                 <p className="rule-text">{text}</p>
-                {proof
+                {derivation
                     ? <Modal
-                            header={`Proof of the ${name}`}
+                            header={`Derivation of the ${name}`}
                             trigger={(
                             <Button>
-                                See proof
+                                Derivation
                             </Button>
                         )}>
-                            {proof}
+                            {derivation}
                         </Modal>
                     : null}
                 {substeps.map((substep, i) => {

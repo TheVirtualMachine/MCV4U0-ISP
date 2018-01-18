@@ -1,5 +1,5 @@
 [submodule "docs/MCV4U0-ISP.wiki"]
-	path = docs/MCV4U0-ISP.wiki
+	path = MCV4U0-ISP.wiki
 	url = https://github.com/TheVirtualMachine/MCV4U0-ISP.wiki.git
 [submodule "backend/latex2sympy"]
 	path = backend/latex2sympy

@@ -96,7 +96,7 @@ class HomePage extends Component {
       });
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     window
       .MathJax
       .Hub

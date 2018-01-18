@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Collapsible, CollapsibleItem, Modal, Button} from 'react-materialize';
-import AddRule from './derivations/AddRule';
+import Steps from './derivations/derivations';
 
 const {MathJax} = window;
 
@@ -8,16 +8,19 @@ const capitalize = word => word.replace(/(^|\s)\S/g, l => l.toUpperCase())
 
 const RULES = {
     'Constant Times Rule': {
-        icon: 'highlight_off'
+        icon: 'highlight_off',
+        derivation: Steps.ConstantTimesRule
     },
     'Power Rule': {
-        icon: 'filter_none'
+        icon: 'filter_none',
+       derivation: Steps.PowerRule
     },
     'Exponent Rule': {
         icon: 'explicit'
     },
     'Constant Rule': {
-        icon: 'copyright'
+        icon: 'copyright',
+        derivation: Steps.ConstantRule
     },
     'Trig Rule': {
         icon: 'signal_cellular_null'
@@ -27,7 +30,7 @@ const RULES = {
     },
     'Add Rule': {
         icon: 'add',
-        derivation: AddRule
+        derivation: Steps.AddRule
     },
     'Don\'t Know Rule': {
         icon: 'help_outline'

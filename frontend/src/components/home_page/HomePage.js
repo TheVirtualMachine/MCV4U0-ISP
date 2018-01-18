@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Navbar, Row, Col, Card, ProgressBar} from 'react-materialize';
+import {Navbar, Row, Col, Card, ProgressBar, Footer} from 'react-materialize';
 import GrapherConfigPanel from './GrapherConfigPanel';
 import StepsContainer from './StepsContainer';
 import './HomePage.css';
@@ -148,6 +148,7 @@ class HomePage extends Component {
               : null}
           </Col>
         </Row>
+        <Footer copyrights="&copy; Oliver Daniel and Vincent Macri 2018."></Footer>
       </div>
     )
   }

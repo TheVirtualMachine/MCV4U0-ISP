@@ -7,7 +7,6 @@ import {
     CollapsibleItem,
     Icon,
     Button,
-    Preloader
 } from 'react-materialize';
 import MathEditor from '../MathEditor';
 import {BlockPicker} from 'react-color';

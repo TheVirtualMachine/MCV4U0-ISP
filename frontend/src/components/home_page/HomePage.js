@@ -14,11 +14,11 @@ const IntegralDisplay = ({
 }) => {
   return (
     <div>
-      <span className="flow-text">Integrals:&nbsp;</span>
-      <span>{`$$\\int ${fcn}\\ dx = ${integral} + C $$`}</span>
-      <span>{`$$\\int_{${lower}}^{${upper}} ${fcn}\\ dx ${definiteIntegral.length < 30
+      <p className="flow-text">Integrals:&nbsp;</p>
+      <p>{`$$\\int ${fcn}\\ dx = ${integral} + C $$`}</p>
+      <p>{`$$\\int_{${lower}}^{${upper}} ${fcn}\\ dx ${definiteIntegral.length < 30
           ? `= ${definiteIntegral}`
-          : ''} \\approx ${approxDefiniteIntegral} $$ `}</span>
+          : ''} \\approx ${approxDefiniteIntegral} $$ `}</p>
     </div>
   );
 }
@@ -44,9 +44,9 @@ const RiemannSumDisplay = ({fcn, sum, samples, upper, lower}) => {
 
   return (
     <div>
-      <span className="flow-text">Riemann Sum:&nbsp;</span>
-      <span>{`$$ \\sum_{i=1}^{${samples}} ${fcn.replace('x', 'x_i')}\\  \\Delta x =  ${sum}, $$`}</span>
-      <span>{`Where $$ \\Delta x = \\frac{${upper} - ${lower}}{${samples}} = ${reducedFraction} $$`}</span>
+      <p className="flow-text">Riemann Sum:&nbsp;</p>
+      <p>{`$$ \\sum_{i=1}^{${samples}} ${fcn.replace('x', 'x_i')}\\  \\Delta x =  ${sum}, $$`}</p>
+      <p>{`Where $$ \\Delta x = \\frac{${upper} - ${lower}}{${samples}} = ${reducedFraction} $$`}</p>
     </div>
   );
 }

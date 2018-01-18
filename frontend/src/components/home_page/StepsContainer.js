@@ -49,15 +49,6 @@ const RULES = {
 class StepsContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            steps: []
-        };
-    }
-
-    componentWillReceiveProps({steps}) {
-        this.setState({
-            steps: this.renderSteps(steps)
-        });
     }
 
     componentDidUpdate() {
@@ -101,7 +92,7 @@ class StepsContainer extends Component {
     render() {
         return (
             <Collapsible>
-                {this.state.steps}
+                {this.renderSteps(this.props.steps)}
             </Collapsible>
         );
     }

@@ -6,7 +6,8 @@ import {
     Collapsible,
     CollapsibleItem,
     Icon,
-    Button
+    Button,
+    Preloader
 } from 'react-materialize';
 import MathEditor from '../MathEditor';
 import {BlockPicker} from 'react-color';
@@ -50,7 +51,7 @@ class GrapherConfigPanel extends Component {
         this.state = {
             equation: 'x^2',
             lower: 0,
-            upper: 20,
+            upper: 10,
             samples: 5,
             handed: 'left',
             graphArea: false,
@@ -170,7 +171,16 @@ class GrapherConfigPanel extends Component {
                 upper: this.state.upper,
                 samples: this.state.samples
             }))
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error);
+                this
+                    .props
+                    .updatePageState({
+                        
+                        loading: false,
+                        graph: '<div><h1>Graphing Failed</h1><h3>Something went wrong. Sorry about that.</h3></div>'
+                    });
+            });
     }
 
     submit() {
@@ -198,8 +208,13 @@ class GrapherConfigPanel extends Component {
                     ...result,
                     loading: false
                 }))
-                .then(() => this.updateGraph())
-                .catch(error => alert(error)); //TODO: errortrap
+                .catch(error => {
+                    console.log(error);
+                    this
+                        .props
+                        .updatePageState({loading: false});
+                }); //TODO: errortrap
+            this.updateGraph();
         }
     }
 
@@ -235,7 +250,7 @@ class GrapherConfigPanel extends Component {
                         .handleLimitChange(true)
                         .bind(this)}
                         type="text"
-                        defaultValue={20}
+                        defaultValue={10}
                         id='upper-lim'
                         validate={this.state.valid.upper}
                         className={(!this.state.valid.upper && 'invalid') || ''}/>

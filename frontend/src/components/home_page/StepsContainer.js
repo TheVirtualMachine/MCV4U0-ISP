@@ -1,21 +1,44 @@
 import React, {Component} from 'react';
-import {Collapsible, CollapsibleItem} from 'react-materialize';
+import {Collapsible, CollapsibleItem, Modal, Button} from 'react-materialize';
 const {MathJax} = window;
 
-const ICONS = {
-    'Constant Times Rule': 'highlight_off',
-    'Power Rule': 'filter_none',
-    'Exponent Rule': 'explicit',
-    'Constant Rule': 'copyright',
-    'Trig Rule': 'signal_cellular_null',
-    'U Rule': 'format_underlined',
-    'Add Rule': 'add',
-    'Don\'t Know Rule': 'help_outline',
-    'Parts Rule': 'donut_large'
-}
+const capitalize = word => word.replace(/(^|\s)\S/g, l => l.toUpperCase())
 
-String.prototype.capitalize = function () {
-    return this.replace(/(^|\s)\S/g, l => l.toUpperCase())
+const RULES = {
+    'Constant Times Rule': {
+        icon: 'highlight_off'
+    },
+    'Power Rule': {
+        icon: 'filter_none',
+        proof: 'Toast!'
+    },
+    'Exponent Rule': {
+        icon: 'explicit'
+    },
+    'Constant Rule': {
+        icon: 'copyright'
+    },
+    'Trig Rule': {
+        icon: 'signal_cellular_null'
+    },
+    'U Rule': {
+        icon: 'format_underlined'
+    },
+    'Add Rule': {
+        icon: 'add'
+    },
+    'Don\'t Know Rule': {
+        icon: 'help_outline'
+    },
+    'Parts Rule': {
+        icon: 'donut_large'
+    },
+    'Reciprocal Rule': {
+        icon: 'vertical_align_center'
+    },
+    'Rewrite Rule': {
+        icon: 'mode_edit'
+    }
 }
 
 class StepsContainer extends Component {
@@ -40,10 +63,24 @@ class StepsContainer extends Component {
 
     renderSteps(step) {
         let {name, text, substeps} = step;
-        name = name.capitalize();
+
+        name = capitalize(name);
+        let {icon, proof} = RULES[name];
+
         return (
-            <CollapsibleItem header={name} icon={ICONS[name]}>
+            <CollapsibleItem header={name} icon={icon}>
                 <p className="rule-text">{text}</p>
+                {proof
+                    ? <Modal
+                            header={`Proof of the ${name}`}
+                            trigger={(
+                            <Button>
+                                See proof
+                            </Button>
+                        )}>
+                            {proof}
+                        </Modal>
+                    : null}
                 {substeps.map((substep, i) => {
                     return (
                         <Collapsible key={`rule-${i}`}>
@@ -51,6 +88,7 @@ class StepsContainer extends Component {
                         </Collapsible>
                     );
                 })}
+
             </CollapsibleItem>
         );
     }

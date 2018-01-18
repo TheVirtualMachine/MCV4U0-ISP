@@ -6,13 +6,15 @@ import {
     Collapsible,
     CollapsibleItem,
     Icon,
-    Button,
+    Button
 } from 'react-materialize';
 import MathEditor from '../MathEditor';
 import {BlockPicker} from 'react-color';
 import 'whatwg-fetch';
 
 import './HomePage.css';
+
+const BASE_URL = 'https://glacial-escarpment-19739.herokuapp.com'
 
 const SWATCHES = [
     '#D9E3F0',
@@ -161,8 +163,8 @@ class GrapherConfigPanel extends Component {
             posColor,
             negColor
         } = this.state;
-        const request = `/graph?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
-        fetch(request)
+        const request = `${BASE_URL}/graph?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}&n=${samples}&handed=${handed}&sum=${graphArea}&pos=${encodeURIComponent(posColor)}&neg=${encodeURIComponent(negColor)}`;
+        fetch(request, {mode: 'cors'})
             .then(result => result.json())
             .then(result => this.props.updatePageState({
                 ...result,
@@ -175,9 +177,10 @@ class GrapherConfigPanel extends Component {
                 this
                     .props
                     .updatePageState({
-                        
+
                         loading: false,
-                        graph: '<div><h1>Graphing Failed</h1><h3>Something went wrong. Sorry about that.</h3></div>'
+                        graph: '<div><h1>Graphing Failed</h1><h3>Something went wrong. Sorry about that.</h3></d' +
+                                'iv>'
                     });
             });
     }
@@ -199,9 +202,9 @@ class GrapherConfigPanel extends Component {
 
             //TODO: graph/allow graph
             let {equation, lower, upper} = this.state;
-            const request = `/integrate?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}`;
+            const request = `${BASE_URL}/integrate?f=${encodeURIComponent(equation)}&lower=${lower}&upper=${upper}`;
 
-            fetch(request)
+            fetch(request, {mode: 'cors'})
                 .then(result => result.json())
                 .then(result => this.props.updatePageState({
                     ...result,

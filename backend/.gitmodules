@@ -1,0 +1,6 @@
+[submodule "../docs/MCV4U0-ISP.wiki"]
+	path = ../docs/MCV4U0-ISP.wiki
+	url = https://github.com/TheVirtualMachine/MCV4U0-ISP.wiki.git
+[submodule "latex2sympy"]
+	path = latex2sympy
+	url = https://github.com/TheVirtualMachine/latex2sympy.git

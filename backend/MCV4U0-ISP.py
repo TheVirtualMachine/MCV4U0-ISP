@@ -26,6 +26,7 @@ from MathJaxProcessor import inlineMath
 
 from flask import Flask, request, abort
 from flask_caching import Cache
+from flask_cors import CORS
 
 import sympy as sp
 from sympy.abc import *
@@ -38,6 +39,7 @@ from RiemannGrapher import graph
 from StepProcessor import getStepTree
 
 app = Flask(__name__) # Create application instance.
+CORS(app, resources=r'\/(integrate|graph)\/*')
 cache = Cache(app, config={"CACHE_TYPE": "simple"})
 
 # Parse input and do server-side checking.
@@ -241,5 +243,6 @@ def integrateRequest():
 	endTime = time.time()
 	logMessage("Integration time: {}".format(endTime - startTime))
 	return result
-	
-app.run(debug=DEBUG_MODE)
+
+if __name__ == '__main__':
+	app.run(debug=DEBUG_MODE)

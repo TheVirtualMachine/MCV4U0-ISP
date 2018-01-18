@@ -1,0 +1,1 @@
+web: gunicorn MCV4U0-ISP:app --log-file -

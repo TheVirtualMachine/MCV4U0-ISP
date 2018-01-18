@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with MCV4U0 ISP. If not, see <http://www.gnu.org/licenses/>.
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 # Print to the console if in debug mode.
 def logMessage(string):

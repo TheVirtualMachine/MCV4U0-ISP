@@ -5,12 +5,12 @@
   "private": true,
   "dependencies": {
     "gh-pages": "^1.1.0",
-    "mathquill": "^0.10.1-a",
+    "mathquill": "^0.10.1",
     "react": "^16.2.0",
     "react-color": "^2.13.8",
     "react-dom": "^16.2.0",
     "react-materialize": "^1.1.2",
-    "react-scripts": "1.0.17",
+    "react-scripts": "1.1.0",
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {

@@ -6,12 +6,12 @@
   "dependencies": {
     "gh-pages": "^1.1.0",
     "mathquill": "^0.10.1",
-    "react": "^16.2.0",
-    "react-color": "^2.13.8",
-    "react-dom": "^16.2.0",
+    "react": "^16.3.2",
+    "react-color": "^2.14.1",
+    "react-dom": "^16.3.2",
     "react-materialize": "^1.1.2",
     "react-scripts": "1.1.0",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
     "predeploy": "npm run build",
